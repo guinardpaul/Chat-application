@@ -1,32 +1,32 @@
 const express = require('express');
+const app = express();
 const path = require('path');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const favicon = require('serve-favicon');
-const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 const port = process.env.PORT || 3000;
 const db = 'mongodb://admin:admin@ds135574.mlab.com:35574/chat-app-mean';
 
 mongoose.Promise = global.Promise;
 // mongoDB connection
 mongoose.connect(db, { useMongoClient: true, })
-  .then((db) => {
-    console.log('Successfully connected to mlab database: ' + db.name);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-const test = require('./app/routes/test');
+    .then((db) => {
+        console.log('Successfully connected to mlab database: ' + db.name);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+
 // MIDDLEWARE
 // log into console (dev)
 app.use(logger('dev'));
 
 // Favicon
-app.use(favicon(path.join(__dirname, 'src', 'favicon.ico')))
+app.use(favicon(path.join(__dirname, 'src', 'favicon.ico')));
 // Allows cross origin in development only
 app.use(cors({ origin: 'http://localhost:4200' }));
 // body-parser
@@ -36,17 +36,25 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/dist/index.html');
+    res.sendFile(__dirname + '/dist/index.html');
 });
 
-app.use('/api', test);
+// Routes
 
 io.on('connection', (socket) => {
-  socket.on('chat message', (msg) => {
-    io.emit('chat message', msg);
-  });
+    console.log('User connected');
+
+    socket.emit('alert-connection', 'Paul');
+
+    socket.on('pick-username', (username) => {
+        console.log(username + ' connecté');
+    });
+
+    socket.on('chat message', (msg) => {
+        io.emit('chat message', msg);
+    });
 });
 
-http.listen(port, () => {
-  console.log('listening on port ' + port);
+server.listen(port, () => {
+    console.log('Appli listening on port ' + port);
 });
