@@ -20,7 +20,7 @@ mongoose.connect(db, { useMongoClient: true, })
   .catch((err) => {
     console.log(err);
   });
-
+const test = require('./app/routes/test');
 // MIDDLEWARE
 // log into console (dev)
 app.use(logger('dev'));
@@ -38,6 +38,8 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/dist/index.html');
 });
+
+app.use('/api', test);
 
 io.on('connection', (socket) => {
   socket.on('chat message', (msg) => {
