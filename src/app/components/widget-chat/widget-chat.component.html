@@ -1,0 +1,71 @@
+<div class="container topMarge">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-comment"></span> Chat
+          <div class="btn-group pull-right">
+            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                          <span class="glyphicon glyphicon-chevron-down"></span>
+                      </button>
+            <ul class="dropdown-menu slidedown">
+              <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-refresh">
+                          </span>Refresh</a></li>
+              <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-ok-sign">
+                          </span>Available</a></li>
+              <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-remove">
+                          </span>Busy</a></li>
+              <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-time"></span>
+                              Away</a></li>
+              <li class="divider"></li>
+              <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-off"></span>
+                              Sign Out</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="panel-body">
+          <ul class="chat">
+              <li *ngFor="let m of listMessages">
+                  <div class="left clearfix" *ngIf="m.nickname===nickname; else rightchat">
+                    <span class="chat-img pull-left">
+                      <img src="http://placehold.it/50/55C1E7/fff&text=ME" alt="User Avatar" class="img-circle" />
+                    </span>
+                    <div class="chat-body clearfix">
+                      <div class="header">
+                        <strong class="primary-font">{{ m.nickname }}</strong> <small class="pull-right text-muted">
+                                          <span class="glyphicon glyphicon-time"></span>{{ m.date | date: 'medium' }}</small>
+                      </div>
+                      <p>{{ m.message }}</p>
+                    </div>
+                  </div>
+                  <ng-template #rightchat>
+                    <div class="right clearfix">
+                      <span class="chat-img pull-right">
+                        <img src="http://placehold.it/50/FA6F57/fff&text=U" alt="User Avatar" class="img-circle" />
+                      </span>
+                      <div class="chat-body clearfix">
+                        <div class="header">
+                          <small class="text-muted"><span class="glyphicon glyphicon-time"></span>{{ m.date | date: 'medium' }}</small>
+                          <strong class="pull-right primary-font">{{ m.nickname }}</strong>
+                        </div>
+                        <p>{{ m.message }}</p>
+                      </div>
+                    </div>
+                  </ng-template>
+          </ul>
+        </div>
+
+        <div class="panel-footer">
+          <div class="input-group">
+            <input id="btn-input" type="text" class="form-control input-sm" name="message" [(ngModel)]="message" 
+            placeholder="message . . ." autofocus required/>
+            <span class="input-group-btn">
+                          <button (click)="sendMessage()" class="btn btn-warning btn-sm" id="btn-chat">Send</button>
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

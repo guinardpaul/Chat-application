@@ -53,7 +53,7 @@ io.on('connection', (socket) => {
 
     socket.on('send-message', (data) => {
         console.log(data);
-        io.emit('new-message', { nickname: data.nickname, message: data.message });
+        io.emit('new-message', { nickname: data.nickname, message: data.message, date: data.date });
     });
 });
 

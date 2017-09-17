@@ -6,22 +6,14 @@
     </md-card-header>
     <md-card-content>{{msg.message}}</md-card-content>
   </md-card> -->
-  <div class="contentBulle">
-    <div class="contentBulleFleche"></div>
-    <div class="contentBulleDescription">
-      Hello world !
-    </div>
-  </div>
+
 
   <md-list>
     <md-list-item *ngFor="let msg of listMessages">
-      <div class="media">
-        <div class="media-left">
-
-        </div>
-        <div class="media-body">
-          <h4 class="media-heading">{{msg.nickname}}</h4>
-          <p>{{msg.message}}</p>
+      <div class="contentBulle">
+        <div class="contentBulleFleche"></div>
+        <div class="contentBulleDescription">
+          {{msg.nickname}} : {{msg.message}}
         </div>
       </div>
     </md-list-item>
