@@ -1,0 +1,54 @@
+<div class="container">
+
+  <!-- <md-card *ngFor="let msg of listMessages">
+    <md-card-header>
+      <md-card-title>{{msg.nickname}}</md-card-title>
+    </md-card-header>
+    <md-card-content>{{msg.message}}</md-card-content>
+  </md-card> -->
+  <div class="contentBulle">
+    <div class="contentBulleFleche"></div>
+    <div class="contentBulleDescription">
+      Hello world !
+    </div>
+  </div>
+
+  <md-list>
+    <md-list-item *ngFor="let msg of listMessages">
+      <div class="media">
+        <div class="media-left">
+
+        </div>
+        <div class="media-body">
+          <h4 class="media-heading">{{msg.nickname}}</h4>
+          <p>{{msg.message}}</p>
+        </div>
+      </div>
+    </md-list-item>
+  </md-list>
+
+
+  <!-- <md-chip-list>
+    <div class="col-sm-6">
+      <md-chip *ngFor="let msg of listMessages" class="mat-chip-list-stacked float clearfix" color="primary">
+
+        {{msg.nickname}} : {{msg.message}}
+
+      </md-chip>
+    </div>
+    <div class="col-sm-6">
+      <md-chip *ngFor="let msg of listMessages" class="mat-chip-list-stacked float clearfix" color="primary">
+
+        {{msg.nickname}} : {{msg.message}}
+
+      </md-chip>
+    </div>
+  </md-chip-list> -->
+
+  <form>
+    <md-form-field>
+      <textarea mdInput mdTextareaAutosize type="text" placeholder="message..." name="message" [(ngModel)]="message" autocomplete="false"></textarea>
+    </md-form-field>
+    <button md-raised-button color="primary" (click)="sendMessage()">Send</button>
+  </form>
+</div>

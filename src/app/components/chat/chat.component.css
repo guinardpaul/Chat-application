@@ -1,0 +1,32 @@
+.contentBulle:hover .contentBulleFleche, .contentBulle:hover .contentBulleDescription {
+  display:block;
+}
+
+.contentBulle { 
+display: inline-block;
+position: relative; 
+width:100%;
+}
+
+.contentBulleFleche { 
+position: absolute;
+width: 0; 
+height: 0; 
+border: 7px solid #C4C4C4; 
+border-top-color: transparent; 
+border-left-color: transparent; 
+border-bottom-color: transparent;
+margin-top: 12px;
+}
+
+.contentBulleDescription { 
+  background:#C4C4C4;
+  color:#000;
+  padding:10px;
+  position:absolute;
+  border-radius:4px; 
+  -moz-border-radius:4px; 
+  -webkit-border-radius:4px;
+  margin-left:13px;
+  border:1px solid #C4C4C4
+}

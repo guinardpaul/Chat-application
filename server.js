@@ -11,6 +11,8 @@ const io = require('socket.io')(server);
 const port = process.env.PORT || 3000;
 const db = 'mongodb://admin:admin@ds135574.mlab.com:35574/chat-app-mean';
 
+const chat = require('./app/routes/chat');
+
 mongoose.Promise = global.Promise;
 // mongoDB connection
 mongoose.connect(db, { useMongoClient: true, })
@@ -24,7 +26,6 @@ mongoose.connect(db, { useMongoClient: true, })
 // MIDDLEWARE
 // log into console (dev)
 app.use(logger('dev'));
-
 // Favicon
 app.use(favicon(path.join(__dirname, 'src', 'favicon.ico')));
 // Allows cross origin in development only
@@ -34,24 +35,25 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // Set Static Folder
 app.use(express.static(path.join(__dirname, 'dist')));
-
+// Refresh page
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/dist/index.html');
 });
 
 // Routes
+app.use('/api', chat);
 
+// socket.io
 io.on('connection', (socket) => {
     console.log('User connected');
 
-    socket.emit('alert-connection', 'Paul');
-
-    socket.on('pick-username', (username) => {
-        console.log(username + ' connecté');
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
     });
 
-    socket.on('chat message', (msg) => {
-        io.emit('chat message', msg);
+    socket.on('send-message', (data) => {
+        console.log(data);
+        io.emit('new-message', { nickname: data.nickname, message: data.message });
     });
 });
 
