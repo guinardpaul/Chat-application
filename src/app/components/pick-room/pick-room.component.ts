@@ -11,7 +11,7 @@ import { ChatService } from '../../services/chat/chat.service';
 })
 export class PickRoomComponent implements OnInit {
   socket = io('http://localhost:3000/');
-  username: string;
+  username: string = '';
 
   constructor(
     private _chatService: ChatService,

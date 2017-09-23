@@ -13,7 +13,7 @@ import { ChatService } from './services/chat/chat.service';
 import { AppComponent } from './app.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { PickRoomComponent } from './components/pick-room/pick-room.component';
-import { WidgetChatComponent } from './components/widget-chat/widget-chat.component';
+import { WidgetChatComponent } from './components/chat-room/chat-room.component';
 
 @NgModule({
   declarations: [
