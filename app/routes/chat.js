@@ -43,7 +43,14 @@ router.get('/chat/:room', (req, res, next) => {
 
 router.post('/chat', (req, res, next) => {
   Chat.create(req.body, (err, data) => {
-    res.json(data);
+    if (err) {
+      res.json({
+        success: false,
+        message: err
+      });
+    } else {
+      res.json(data);
+    }
   });
 });
 

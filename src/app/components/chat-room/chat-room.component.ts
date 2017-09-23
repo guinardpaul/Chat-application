@@ -7,7 +7,7 @@ import * as io from 'socket.io-client';
   templateUrl: './chat-room.component.html',
   styleUrls: [ './chat-room.component.css' ]
 })
-export class WidgetChatComponent implements OnInit {
+export class ChatRoomComponent implements OnInit {
   socket = io('http://localhost:3000/');
   nickname: String;
   listMessages: any[] = [];
@@ -32,6 +32,13 @@ export class WidgetChatComponent implements OnInit {
   }
 
   onLogout() {
+    const now = Date.now();
+    // Envoi message user déconnecté à tous les autres utilisateurs
+    this.socket.emit('send-message', {
+      nickname: this.nickname,
+      message: this.nickname + ' s\'est déconnecté',
+      date: now
+    });
     // Enleve user du localStorage
     localStorage.removeItem('user');
     // Renvoi vers route /pick-room

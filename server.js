@@ -12,6 +12,7 @@ const port = process.env.PORT || 3000;
 const db = 'mongodb://admin:admin@ds135574.mlab.com:35574/chat-app-mean';
 
 const chat = require('./app/routes/chat');
+const user = require('./app/routes/user');
 
 mongoose.Promise = global.Promise;
 // mongoDB connection
@@ -42,21 +43,28 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use('/api', chat);
+app.use('/api', user);
 
 // socket.io
 io.on('connection', (socket) => {
-    console.log('User connected');
+    //console.log('User connected');
 
-    socket.on('disconnect', () => {
-        console.log('User disconnected');
+    socket.on('disconnect', (user) => {
+        console.log(user.nickname + ' disconnected !')
+        io.emit('remove-user', user);
     });
 
     socket.on('send-message', (data) => {
         console.log(data);
         io.emit('new-message', { nickname: data.nickname, message: data.message, date: data.date });
     });
+
+    socket.on('login', (user) => {
+        console.log(user.nickname + ' logged In !');
+        io.emit('add-user', user);
+    });
 });
 
 server.listen(port, () => {
-    console.log('Appli listening on port ' + port);
+    console.log('App listening on port ' + port);
 });

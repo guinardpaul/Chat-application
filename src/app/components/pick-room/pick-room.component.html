@@ -1,8 +1,28 @@
-<div class="container center topMarge">
-  <form>
-    <md-form-field>
-      <input mdInput type="text" name="username" [(ngModel)]="username" placeholder="Nickname" autocomplete="false" required>
-    </md-form-field>
-    <button md-raised-button color="primary" (click)="submitUser()">Submit</button>
-  </form>
+<div class="container-fluid center">
+
+  <div *ngIf="!userLoggedIn" class="topMarge">
+    <form>
+      <md-form-field>
+        <input mdInput type="text" name="user.nickname" [(ngModel)]="user.nickname" placeholder="Nickname" autocomplete="false" required>
+      </md-form-field>
+      <button md-raised-button color="primary" (click)="onLogin()">Login</button>
+    </form>
+  </div>
+
+  <div *ngIf="userLoggedIn">
+    <h3>Nickname : {{user.nickname}}</h3>
+    <hr/>
+    <h4>Utilisateurs connectés</h4>
+    <p>Sélectionnez les personnes avec qui discuter puis cliquer sur Joindre pour commencer à discuter</p>
+    <md-selection-list #users>
+      <md-list-option *ngFor="let u of listUser">
+        <p>{{u.nickname}}</p>
+      </md-list-option>
+    </md-selection-list>
+    <button md-raised-button color="primary" (click)="joinRoom()" class="button-position">Rejoindre</button>
+    <p>
+      Options selected: {{users.selectedOptions.selected.length}}
+    </p>
+  </div>
+
 </div>
