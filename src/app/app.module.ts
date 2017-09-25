@@ -2,6 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+// Angular Flash messages
+import { FlashMessagesModule } from 'ngx-flash-messages';
 
 // Modules
 import { AppRoutingModule } from './modules/app-routing/app-routing.module';
@@ -10,6 +12,7 @@ import { AppMaterialModule } from './modules/app-material/app-material.module';
 // Services
 import { ChatService } from './services/chat/chat.service';
 import { UserService } from './services/user/user.service';
+import { FlashMsgService } from './services/flash-messages/flash-messages.service';
 
 // Components
 import { AppComponent } from './app.component';
@@ -29,11 +32,13 @@ import { ChatRoomComponent } from './components/chat-room/chat-room.component';
     AppMaterialModule,
     FormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FlashMessagesModule
   ],
   providers: [
     ChatService,
-    UserService
+    UserService,
+    FlashMsgService
   ],
   bootstrap: [ AppComponent ]
 })

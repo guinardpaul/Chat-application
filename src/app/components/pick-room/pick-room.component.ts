@@ -4,6 +4,7 @@ import * as io from 'socket.io-client';
 
 import { ChatService } from '../../services/chat/chat.service';
 import { UserService } from '../../services/user/user.service';
+import { FlashMsgService } from '../../services/flash-messages/flash-messages.service';
 
 import { User } from '../../models/User';
 
@@ -13,16 +14,18 @@ import { User } from '../../models/User';
   styleUrls: [ './pick-room.component.css' ]
 })
 export class PickRoomComponent implements OnInit, OnDestroy {
-  socket = io('http://localhost:3000/');
+  // Change for test on several devis or PROD
+  //socket = io('http://localhost:3000/');
+  socket = io('http://192.168.0.15:3000/');
+
   username: string = '';
   user = new User();
-  currentUser = new User();
   userLoggedIn: boolean;
   listUser: User[] = [];
 
   constructor(
-    private _chatService: ChatService,
     private _userService: UserService,
+    private _flashMsg: FlashMsgService,
     private _router: Router
   ) { }
 
@@ -31,9 +34,8 @@ export class PickRoomComponent implements OnInit, OnDestroy {
     if (this.user.nickname.trim().length > 0) {
       // save user to database and on localStorage
       this.saveUser(this.user);
-      localStorage.setItem('user', JSON.stringify(this.user));
       // emit login to all users
-      this.socket.emit('login', this.user);
+      //this.socket.emit('login', this.user);
       // set select room view
       this.userLoggedIn = true;
     }
@@ -42,11 +44,17 @@ export class PickRoomComponent implements OnInit, OnDestroy {
   saveUser(user: User) {
     this._userService.saveUser(user)
       .subscribe(data => {
-        this.currentUser = data;
-        /* if (JSON.parse(localStorage.getItem('user')).nickname !== data.nickname) {
-          console.log('User add to listUser');
-          this.listUser.push(data);
-        } */
+        this.user = data;
+        localStorage.setItem('user', JSON.stringify(data));
+      }, err => console.log(err)
+      , () => this.socket.emit('login', this.user)
+      )
+  }
+
+  updateStatusUser(id: number, user: User) {
+    this._userService.updateStatus(id, user)
+      .subscribe(data => {
+        // TODO: add flash messages logout/login
       }, err => console.log(err)
       )
   }
@@ -59,6 +67,7 @@ export class PickRoomComponent implements OnInit, OnDestroy {
       )
   }
 
+  // TODO:
   joinRoom() {
 
     this._router.navigate([ '/chat' ]);
@@ -76,29 +85,38 @@ export class PickRoomComponent implements OnInit, OnDestroy {
           }
         }
         this.listUser = userLogin;
-        console.log(this.listUser);
       }, err => {
         console.log(err);
       });
   }
 
   ngOnDestroy() {
+    console.log(this.user);
     this.deleteUser(this.user._id);
-    this.socket.emit('disconnect', this.user);
+    localStorage.removeItem('user');
+    this.socket.emit('disconnect');
   }
 
   ngOnInit() {
-    this.getUserLoggedIn();
-
+    // On user Logged In
     this.socket.on('add-user', user => {
       this.getUserLoggedIn();
+      console.log(localStorage);
+      if (user.nickname !== this.user.nickname) {
+        this._flashMsg.successMsg(user.nickname + ' s\'est connecté');
+      }
     });
 
-    this.socket.on('remove-user', user => {
-      console.log('remove user');
-      localStorage.removeItem('user');
+    // On user Logged Out
+    this.socket.on('remove-user', () => {
+      //this._flashMsg.successMsg(user.nickname + ' s\'est déconnecté');
+      console.log(localStorage);
+      // TODO: change delete pour update status user.connected quand Auth implementee
       //this.user.connected = false;
-      this.listUser.splice(this.listUser.indexOf(this.currentUser), 1);
+      //this.updateStatusUser(this.user._id, this.user);
+
+      this.getUserLoggedIn();
+      //this.listUser.splice(this.listUser.indexOf(this.user), 1);
     });
 
   }

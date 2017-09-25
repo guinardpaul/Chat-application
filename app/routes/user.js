@@ -19,45 +19,71 @@ router.get('/user', (req, res, next) => {
 });
 
 router.post('/user', (req, res, next) => {
-  User.create(req.body, (err, data) => {
-    if (err) {
-      res.json({
-        success: false,
-        message: err
-      });
-    } else {
-      res.json(data);
-    }
-  });
+  if (!req.body.nickname) {
+    res.json({
+      success: false,
+      message: 'Nickname not provided'
+    });
+  } else {
+    User.create(req.body, (err, data) => {
+      if (err) {
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        res.json(data);
+      }
+    });
+  }
 });
 
 router.put('/user/:id', (req, res, next) => {
-  User.findByIdAndUpdate(req.params.id, req.body, (err, data) => {
-    if (err) {
-      res.json({
-        success: false,
-        message: err
-      });
-    } else {
-      res.json(data);
-    }
-  });
+  if (!req.body) {
+    res.json({
+      success: false,
+      message: 'body not provided'
+    });
+  } else if (!req.params.id) {
+    res.json({
+      success: false,
+      message: 'id not provided'
+    });
+  } else {
+    User.findByIdAndUpdate(req.params.id, req.body, (err, data) => {
+      if (err) {
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        res.json(data);
+      }
+    });
+  }
 });
 
 router.delete('/user/:id', (req, res, next) => {
-  User.findByIdAndRemove(req.params.id, (err, data) => {
-    if (err) {
-      res.json({
-        success: false,
-        message: err
-      });
-    } else {
-      res.json({
-        success: true,
-        message: 'User supprimé'
-      });
-    }
-  });
+  if (!req.params.id) {
+    res.json({
+      success: false,
+      message: 'id not provided'
+    });
+  } else {
+    User.findByIdAndRemove(req.params.id, (err, data) => {
+      if (err) {
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        res.json({
+          success: true,
+          message: 'User supprimé'
+        });
+      }
+    });
+  }
 });
 
 module.exports = router;

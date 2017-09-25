@@ -1,11 +1,11 @@
 <div class="container-fluid center">
 
   <div *ngIf="!userLoggedIn" class="topMarge">
-    <form>
+    <form (ngSubmit)="onLogin()">
       <md-form-field>
         <input mdInput type="text" name="user.nickname" [(ngModel)]="user.nickname" placeholder="Nickname" autocomplete="false" required>
       </md-form-field>
-      <button md-raised-button color="primary" (click)="onLogin()">Login</button>
+      <button type="submit" md-raised-button color="primary">Login</button>
     </form>
   </div>
 
@@ -13,7 +13,7 @@
     <h3>Nickname : {{user.nickname}}</h3>
     <hr/>
     <h4>Utilisateurs connectés</h4>
-    <p>Sélectionnez les personnes avec qui discuter puis cliquer sur Joindre pour commencer à discuter</p>
+    <p>Sélectionnez les personnes avec qui discuter puis cliquer sur Rejoindre pour commencer à discuter</p>
     <md-selection-list #users>
       <md-list-option *ngFor="let u of listUser">
         <p>{{u.nickname}}</p>

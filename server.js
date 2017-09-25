@@ -30,7 +30,7 @@ app.use(logger('dev'));
 // Favicon
 app.use(favicon(path.join(__dirname, 'src', 'favicon.ico')));
 // Allows cross origin in development only
-app.use(cors({ origin: 'http://localhost:4200' }));
+app.use(cors({ origin: 'http://192.168.0.15:3000/' }));
 // body-parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -49,9 +49,11 @@ app.use('/api', user);
 io.on('connection', (socket) => {
     //console.log('User connected');
 
-    socket.on('disconnect', (user) => {
-        console.log(user.nickname + ' disconnected !')
-        io.emit('remove-user', user);
+    socket.on('disconnect', () => {
+        //console.log(localStorage);
+        // localStorage.removeItem('user');
+        console.log('User disconnected !');
+        io.emit('remove-user');
     });
 
     socket.on('send-message', (data) => {
