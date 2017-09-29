@@ -1,3 +1,4 @@
+const env = require('./env');
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -10,15 +11,16 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const port = process.env.PORT || 3000;
 const db = 'mongodb://admin:admin@ds135574.mlab.com:35574/chat-app-mean';
+const config = require('./config/database');
 
 const chat = require('./app/routes/chat');
 const user = require('./app/routes/user');
 
 mongoose.Promise = global.Promise;
 // mongoDB connection
-mongoose.connect(db, { useMongoClient: true, })
+mongoose.connect(config.uri, { useMongoClient: true, })
     .then((db) => {
-        console.log('Successfully connected to mlab database: ' + db.name);
+        console.log('Successfully connected to ' + config.db);
     })
     .catch((err) => {
         console.log(err);
@@ -28,15 +30,22 @@ mongoose.connect(db, { useMongoClient: true, })
 // log into console (dev)
 app.use(logger('dev'));
 // Favicon
-app.use(favicon(path.join(__dirname, 'src', 'favicon.ico')));
+//app.use(favicon(path.join(__dirname, 'src', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'dist', 'favicon.ico')));
 // Allows cross origin in development only
+// Decomment for test
 app.use(cors({ origin: 'http://192.168.0.15:3000/' }));
+//app.use(cors({ origin: 'http://localhost:4200' }));
 // body-parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // Set Static Folder
+//app.use(express.static(path.join(__dirname, 'src')));
 app.use(express.static(path.join(__dirname, 'dist')));
 // Refresh page
+/* app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/src/index.html');
+}); */
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/dist/index.html');
 });
@@ -48,9 +57,13 @@ app.use('/api', user);
 // socket.io
 io.on('connection', (socket) => {
     //console.log('User connected');
+    socket.on('login', (user) => {
+        console.log(user.nickname + ' logged In !');
+        io.emit('add-user', user);
+    });
 
-    socket.on('disconnect', () => {
-        //console.log(localStorage);
+    socket.on('fermer-app', (user) => {
+        console.log('déconnexion ' + user);
         // localStorage.removeItem('user');
         console.log('User disconnected !');
         io.emit('remove-user');
@@ -60,13 +73,8 @@ io.on('connection', (socket) => {
         console.log(data);
         io.emit('new-message', { nickname: data.nickname, message: data.message, date: data.date });
     });
-
-    socket.on('login', (user) => {
-        console.log(user.nickname + ' logged In !');
-        io.emit('add-user', user);
-    });
 });
 
 server.listen(port, () => {
-    console.log('App listening on port ' + port);
+    console.log('Listening on port ' + port + ' in ' + process.env.NODE_ENV + ' mode');
 });
