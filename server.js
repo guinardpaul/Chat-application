@@ -10,17 +10,18 @@ const favicon = require('serve-favicon');
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const port = process.env.PORT || 3000;
-const db = 'mongodb://admin:admin@ds135574.mlab.com:35574/chat-app-mean';
+const db = 'mongodb://localhost:27017/chat-app-mean';
 const config = require('./config/database');
 
 const chat = require('./app/routes/chat');
 const user = require('./app/routes/user');
+const room = require('./app/routes/room');
 
 mongoose.Promise = global.Promise;
 // mongoDB connection
-mongoose.connect(config.uri, { useMongoClient: true, })
+mongoose.connect(db, { useMongoClient: true, })
     .then((db) => {
-        console.log('Successfully connected to ' + config.db);
+        console.log('Successfully connected to ' + db.name);
     })
     .catch((err) => {
         console.log(err);
@@ -53,6 +54,7 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api', chat);
 app.use('/api', user);
+app.use('/api', room);
 
 // socket.io
 io.on('connection', (socket) => {
@@ -71,7 +73,7 @@ io.on('connection', (socket) => {
 
     socket.on('send-message', (data) => {
         console.log(data);
-        io.emit('new-message', { nickname: data.nickname, message: data.message, date: data.date });
+        io.emit('new-message', data);
     });
 });
 

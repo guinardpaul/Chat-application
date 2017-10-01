@@ -12,6 +12,7 @@ import { AppMaterialModule } from './modules/app-material/app-material.module';
 // Services
 import { ChatService } from './services/chat/chat.service';
 import { UserService } from './services/user/user.service';
+import { RoomService } from './services/room/room.service';
 import { FlashMsgService } from './services/flash-messages/flash-messages.service';
 
 // Components
@@ -38,6 +39,7 @@ import { ChatRoomComponent } from './components/chat-room/chat-room.component';
   providers: [
     ChatService,
     UserService,
+    RoomService,
     FlashMsgService
   ],
   bootstrap: [ AppComponent ]

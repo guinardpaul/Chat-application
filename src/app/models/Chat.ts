@@ -1,7 +1,10 @@
-export class User {
-  _id: number;
+import { Room } from './Room';
+
+export class Chat {
+  _id?: number;
+  room: Room;
   nickname: string;
-  connected: boolean;
+  message: string;
   updated_at: Date;
 
   constructor(value: Object = {}) {

@@ -4,9 +4,11 @@ import * as io from 'socket.io-client';
 
 import { ChatService } from '../../services/chat/chat.service';
 import { UserService } from '../../services/user/user.service';
+import { RoomService } from '../../services/room/room.service';
 import { FlashMsgService } from '../../services/flash-messages/flash-messages.service';
 
 import { User } from '../../models/User';
+import { Room } from '../../models/Room';
 
 @Component({
   selector: 'app-pick-room',
@@ -15,23 +17,27 @@ import { User } from '../../models/User';
 })
 export class PickRoomComponent implements OnInit {
   // Change for test on several device or PROD
-  //socket = io('http://localhost:3000/');
+  // socket = io('http://localhost:3000/');
   socket = io('http://192.168.0.15:3000/');
 
-  username: string = '';
+  nickname: string;
   user = new User();
+  selectedUsers = new Array<User>();
+  users = new Array<User>();
   userLoggedIn: boolean;
-  listUser: User[] = [];
+  listUser = new Array<User>();
 
   constructor(
     private _userService: UserService,
+    private _chatService: ChatService,
+    private _roomService: RoomService,
     private _flashMsg: FlashMsgService,
     private _router: Router
   ) { }
 
   /**
    * On login : called when user enter a nickname
-   * 
+   *
    * @memberof PickRoomComponent
    */
   onLogin() {
@@ -48,7 +54,7 @@ export class PickRoomComponent implements OnInit {
 
   /**
    * Save user on Login and emit login => trigger add-use
-   * 
+   *
    * @param {User} user user body
    * @memberof PickRoomComponent
    */
@@ -59,7 +65,7 @@ export class PickRoomComponent implements OnInit {
         sessionStorage.setItem('user', JSON.stringify(data.obj));
       }, err => console.log(err)
       , () => this.socket.emit('login', this.user)
-      )
+      );
   }
 
   updateStatusUser(id: number, user: User) {
@@ -68,7 +74,7 @@ export class PickRoomComponent implements OnInit {
       .subscribe(data => {
         // TODO: add flash messages logout/login
       }, err => console.log(err)
-      )
+      );
   }
 
   deleteUser(id: number) {
@@ -77,21 +83,47 @@ export class PickRoomComponent implements OnInit {
         console.log(data.message);
         // TODO: add flash messages logout/login
       }, err => console.log(err)
-      )
+      );
   }
 
   // TODO:
   joinRoom() {
+    // create roomName based on users nickname
+    this.selectedUsers.push(this.user);
+    let roomName = '';
+    for (const user in this.selectedUsers) {
+      if (this.selectedUsers.hasOwnProperty(user)) {
+        roomName += this.selectedUsers[ user ].nickname;
+      }
+    }
 
-    this._router.navigate([ '/chat' ]);
+    // Save room
+    const room = {
+      name: roomName,
+      users: this.selectedUsers
+    };
+
+    this.saveRoom(room);
+  }
+
+  saveRoom(room: Room) {
+    this._roomService.createRoom(room)
+      .subscribe(data => {
+        console.log(data);
+        localStorage.setItem('room', JSON.stringify(data.obj._id));
+      });
+
+    setTimeout(() => {
+      this._router.navigate([ '/room', JSON.parse(localStorage.getItem('room')) ]);
+    }, 1000);
   }
 
   getUserLoggedIn(): User[] {
-    var userLogin: User[] = [];
+    const userLogin: User[] = [];
     this._userService.getAllUser()
       .subscribe(data => {
         console.log(data);
-        for (var u in data.obj) {
+        for (const u in data.obj) {
           if (data.obj.hasOwnProperty(u)) {
             if (data.obj[ u ].connected && data.obj[ u ].nickname !== JSON.parse(sessionStorage.getItem('user')).nickname) {
               userLogin.push(data.obj[ u ]);
@@ -112,11 +144,21 @@ export class PickRoomComponent implements OnInit {
     this.socket.emit('disconnect');
   } */
 
+  onUsersSelected(user: User) {
+    if (this.selectedUsers.indexOf(user) !== -1) {
+      this.selectedUsers.splice(this.selectedUsers.indexOf(user), 1);
+    } else {
+      this.selectedUsers.push(user);
+    }
+    console.log(this.selectedUsers);
+  }
+
   ngOnInit() {
-    this.getUserLoggedIn();
     // Test si sessionStorage contient user
     if (sessionStorage.length > 0) {
       this.userLoggedIn = true;
+      this.user = JSON.parse(sessionStorage.getItem('user'));
+      this.getUserLoggedIn();
     }
 
     // On user Logged In
@@ -128,19 +170,17 @@ export class PickRoomComponent implements OnInit {
       }
     });
 
-    //TODO: Trouver un moyen pour set user to disconnect quand il n'est plus connecté
+    // TODO: Trouver un moyen pour set user to disconnect quand il n'est plus connecté
     // - Si appuie sur disconnect : OK
     // - Si ferme le navigateur brutalement: ??
     // On user Logged Out
     this.socket.on('remove-user', () => {
-      //this._flashMsg.successMsg(user.nickname + ' s\'est déconnecté');
-      console.log(sessionStorage);
       // TODO: change delete pour update status user.connected quand Auth implementee
-      //this.user.connected = false;
-      //this.updateStatusUser(this.user._id, this.user);
+      // this.user.connected = false;
+      // this.updateStatusUser(this.user._id, this.user);
 
       this.getUserLoggedIn();
-      //this.listUser.splice(this.listUser.indexOf(this.user), 1);
+      // this.listUser.splice(this.listUser.indexOf(this.user), 1);
     });
 
   }

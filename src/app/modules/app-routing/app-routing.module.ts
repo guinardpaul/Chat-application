@@ -8,7 +8,8 @@ import { ChatRoomComponent } from '../../components/chat-room/chat-room.componen
 
 const appRoutes: Routes = [
   { path: 'pick-room', component: PickRoomComponent },
-  { path: 'chat', component: ChatRoomComponent },
+  { path: 'room', component: ChatRoomComponent },
+  { path: 'room/:id', component: ChatRoomComponent },
   { path: '', redirectTo: 'pick-room', pathMatch: 'full' }
 ];
 

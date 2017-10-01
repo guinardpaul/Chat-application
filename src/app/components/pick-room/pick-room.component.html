@@ -14,14 +14,14 @@
     <hr/>
     <h4>Utilisateurs connectés</h4>
     <p>Sélectionnez les personnes avec qui discuter puis cliquer sur Rejoindre pour commencer à discuter</p>
-    <md-selection-list #users>
-      <md-list-option *ngFor="let u of listUser">
+    <md-selection-list>
+      <md-list-option *ngFor="let u of listUser" (click)="onUsersSelected(u)">
         <p>{{u.nickname}}</p>
       </md-list-option>
     </md-selection-list>
     <button md-raised-button color="primary" (click)="joinRoom()" class="button-position">Rejoindre</button>
     <p>
-      Options selected: {{users.selectedOptions.selected.length}}
+      Users selected: {{selectedUsers | json}}
     </p>
   </div>
 

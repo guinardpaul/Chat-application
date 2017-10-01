@@ -7,8 +7,8 @@ import 'rxjs/add/observable/throw';
 
 import { User } from '../../models/User';
 
-//const devUrl = '/api/user'
-const devUrl = '/api/user'
+const devUrl = '/api/users';
+// const devUrl = 'http://localhost:3000/api/users';
 
 @Injectable()
 export class UserService {
@@ -19,6 +19,14 @@ export class UserService {
 
   getAllUser(): Observable<any> {
     return this._http.get(`${devUrl}`);
+  }
+
+  getOneUserById(id: number): Observable<any> {
+    return this._http.get(`${devUrl}/${id}`);
+  }
+
+  getOneUserByNickname(nickname: string): Observable<any> {
+    return this._http.get(`${devUrl}/${nickname}`);
   }
 
   saveUser(user): Observable<any> {

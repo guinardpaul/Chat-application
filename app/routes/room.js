@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
+const Room = require('../models/Room');
 
-router.get('/users', (req, res, next) => {
-  User.find((err, data) => {
+/**
+ * get all rooms
+ */
+router.get('/room', (req, res, next) => {
+  Room.find((err, data) => {
     if (err) {
       res.json({
         success: false,
@@ -18,14 +21,44 @@ router.get('/users', (req, res, next) => {
   });
 });
 
-router.get('/users/:id', (req, res, next) => {
+/**
+ * get room by users
+ * TODO: A modifier pour trouver room qq soit l'user id
+ */
+router.get('/room/users/:users', (req, res, next) => {
+  if (!req.params.users) {
+    res.json({
+      success: false,
+      message: 'users not provided'
+    });
+  } else {
+    Room.findOne({ users: req.params.users }, (err, data) => {
+      if (err) {
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        res.json({
+          success: true,
+          obj: data
+        });
+      }
+    });
+  }
+});
+
+/**
+ * get Room by ID
+ */
+router.get('/room/:id', (req, res, next) => {
   if (!req.params.id) {
     res.json({
       success: false,
       message: 'id not provided'
     });
   } else {
-    User.findById(req.params.id, (err, data) => {
+    Room.findById(req.params.id, (err, data) => {
       if (err) {
         res.json({
           success: false,
@@ -41,14 +74,17 @@ router.get('/users/:id', (req, res, next) => {
   }
 });
 
-router.get('/users/:nickname', (req, res, next) => {
-  if (!req.params.nickname) {
+/**
+ * Save Room
+ */
+router.post('/room', (req, res, next) => {
+  if (!req.body) {
     res.json({
       success: false,
-      message: 'nickname not provided'
+      message: 'body not provided'
     });
   } else {
-    User.findOne({ nickname: req.params.nickname }, (err, data) => {
+    Room.create(req.body, (err, data) => {
       if (err) {
         res.json({
           success: false,
@@ -64,40 +100,11 @@ router.get('/users/:nickname', (req, res, next) => {
   }
 });
 
-router.post('/users', (req, res, next) => {
-  if (!req.body.nickname) {
-    res.json({
-      success: false,
-      message: 'Nickname not provided'
-    });
-  } else if (!req.body.updated_at) {
-    res.json({
-      success: false,
-      message: 'updated_at not provided'
-    });
-  } else if (!req.body.connected) {
-    res.json({
-      success: false,
-      message: 'connected not provided'
-    });
-  } else {
-    User.create(req.body, (err, data) => {
-      if (err) {
-        res.json({
-          success: false,
-          message: err
-        });
-      } else {
-        res.json({
-          success: true,
-          obj: data
-        });
-      }
-    });
-  }
-});
-
-router.put('/users/:id', (req, res, next) => {
+/**
+ * Update Room by room ID
+ * Used to add User to a room
+ */
+router.put('/room/:id', (req, res, next) => {
   if (!req.body) {
     res.json({
       success: false,
@@ -109,7 +116,7 @@ router.put('/users/:id', (req, res, next) => {
       message: 'id not provided'
     });
   } else {
-    User.findByIdAndUpdate(req.params.id, req.body, (err, data) => {
+    Room.findByIdAndUpdate(req.params.id, req.body, (err, data) => {
       if (err) {
         res.json({
           success: false,
@@ -125,14 +132,23 @@ router.put('/users/:id', (req, res, next) => {
   }
 });
 
-router.delete('/users/:id', (req, res, next) => {
-  if (!req.params.id) {
+/**
+ * Update Room by room NAME
+ * Used to add User to a room
+ */
+router.put('/room/:name', (req, res, next) => {
+  if (!req.body) {
+    res.json({
+      success: false,
+      message: 'body not provided'
+    });
+  } else if (!req.params.id) {
     res.json({
       success: false,
       message: 'id not provided'
     });
   } else {
-    User.findByIdAndRemove(req.params.id, (err, data) => {
+    Room.findOneAndUpdate({ name: req.params.name }, req.body, (err, data) => {
       if (err) {
         res.json({
           success: false,
@@ -141,7 +157,7 @@ router.delete('/users/:id', (req, res, next) => {
       } else {
         res.json({
           success: true,
-          message: 'User supprimé'
+          obj: data
         });
       }
     });
