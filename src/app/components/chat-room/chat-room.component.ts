@@ -38,6 +38,13 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
     private activatedRoute: ActivatedRoute,
   ) { }
 
+  /**
+   * On SendMessage :
+   * - save Chat to database
+   * - emit send-message au server
+   *
+   * @memberof ChatRoomComponent
+   */
   sendMessage() {
     if (this.message.trim().length > 0) {
       const now = new Date(Date.now());
@@ -55,6 +62,12 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  /**
+   * Save chat
+   *
+   * @param {Chat} chat chat body
+   * @memberof ChatRoomComponent
+   */
   saveChat(chat: Chat) {
     this._chatService.saveMessage(chat)
       .subscribe(data => {
@@ -63,6 +76,12 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
       );
   }
 
+  /**
+   * Get room by id
+   *
+   * @param {number} id room id
+   * @memberof ChatRoomComponent
+   */
   getRoomById(id: number) {
     this._roomService.getRoomById(id)
       .subscribe(data => {
@@ -72,6 +91,12 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
       });
   }
 
+  /**
+   * Get Chat by room
+   *
+   * @param {Room} room room body
+   * @memberof ChatRoomComponent
+   */
   getChatByRoom(room: Room) {
     this._chatService.getChatByRoom(room)
       .subscribe(data => {
@@ -80,6 +105,13 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
       });
   }
 
+  /**
+   * On Logout :
+   * - emit send-message au server
+   * - redirect to pick-room
+   *
+   * @memberof ChatRoomComponent
+   */
   onLogout() {
     const now = Date.now();
     // Envoi message user déconnecté à tous les autres utilisateurs
@@ -105,10 +137,11 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
-    // Recupere nickname from localStorage
+    // Set this.user par le sessionStorage
     this.user = JSON.parse(sessionStorage.getItem('user'));
     this.nickname = this.user.nickname;
 
+    // Get Room
     if (this.activatedRoute.snapshot.params[ 'id' ] !== undefined) {
       this.id_room = this.activatedRoute.snapshot.params[ 'id' ];
       this.getRoomById(this.id_room);

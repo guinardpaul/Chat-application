@@ -37,7 +37,7 @@ export class PickRoomComponent implements OnInit {
   ) { }
 
   /**
-   * On login : called when user enter a nickname
+   * On login : used when user enter a nickname
    *
    * @memberof PickRoomComponent
    */
@@ -54,7 +54,9 @@ export class PickRoomComponent implements OnInit {
   }
 
   /**
-   * Save user on Login and emit login => trigger add-use
+   * On Login :
+   * - save User to database
+   * - emit login to server
    *
    * @param {User} user user body
    * @memberof PickRoomComponent
@@ -70,6 +72,13 @@ export class PickRoomComponent implements OnInit {
       );
   }
 
+  /**
+   * NOT USED
+   * 
+   * @param {number} id user id
+   * @param {User} user user body
+   * @memberof PickRoomComponent
+   */
   updateStatusUser(id: number, user: User) {
     this.user.connected = false;
     this._userService.updateStatus(id, user)
@@ -79,6 +88,12 @@ export class PickRoomComponent implements OnInit {
       );
   }
 
+  /**
+   * NOT USED
+   * 
+   * @param {number} id user id
+   * @memberof PickRoomComponent
+   */
   deleteUser(id: number) {
     this._userService.deleteUser(id)
       .subscribe(data => {
@@ -88,6 +103,15 @@ export class PickRoomComponent implements OnInit {
       );
   }
 
+  /**
+   * On Join Room :
+   * - Check si roomCommune pour les users existe
+   * - crée room si n'existe pas
+   * - redirect vers room
+   * - emit connection user au server
+   * 
+   * @memberof PickRoomComponent
+   */
   joinRoom() {
     // Check si room between the two users exists
     // Get User B information
@@ -96,12 +120,13 @@ export class PickRoomComponent implements OnInit {
     this.getRoomCommuneTwoUsers(this.user._id, userB._id);
 
     setTimeout(() => {
+      // Si roomCommune existe
       if (this.roomCommune.success) {
         setTimeout(() => {
           this._router.navigate([ '/room', this.roomCommune.obj._id ]);
         }, 1000);
       } else {
-        // Room doesn't exists => Create room
+        // Si roomCommune n'existe pas
         // create roomName based on users nickname
         this.selectedUsers.push(this.user);
         let roomName = '';
@@ -110,14 +135,18 @@ export class PickRoomComponent implements OnInit {
             roomName += this.selectedUsers[ user ].nickname;
           }
         }
+        // Set room body
         const room = {
           name: roomName,
           users: this.selectedUsers
         };
 
+        // save Room
         this.saveRoom(room);
       }
-      const now = new Date(Date.now());
+
+      // Emit connexion to room message
+      const now = new Date();
       const joinMsg = {
         nickname: this.user.nickname,
         message: this.user.nickname + ' s\'est connecté',
@@ -129,6 +158,13 @@ export class PickRoomComponent implements OnInit {
 
   }
 
+  /**
+   * Save Room
+   * utilisé si room entre plusieurs users n'existe pas
+   *
+   * @param {Room} room room body
+   * @memberof PickRoomComponent
+   */
   saveRoom(room: Room) {
     this._roomService.createRoom(room)
       .subscribe(data => {
@@ -136,13 +172,22 @@ export class PickRoomComponent implements OnInit {
         localStorage.setItem('room', JSON.stringify(data.obj._id));
       });
 
+    // redirect to room created
     setTimeout(() => {
       this._router.navigate([ '/room', JSON.parse(localStorage.getItem('room')) ]);
     }, 1000);
   }
 
+  /**
+   * Get Room commune à 2 users
+   * Set this.roomCommune
+   *
+   * @param {number} idA userA id
+   * @param {number} idB userB id
+   * @memberof PickRoomComponent
+   */
   getRoomCommuneTwoUsers(idA: number, idB: number) {
-    return this._roomService.getRoomCommune(idA, idB)
+    this._roomService.getRoomCommune(idA, idB)
       .subscribe(data => {
         console.log(data);
         this.roomCommune = data;
@@ -150,7 +195,14 @@ export class PickRoomComponent implements OnInit {
       );
   }
 
-  getOneUser(id): User {
+  /**
+   * NOT USED
+   *
+   * @param {number} id user id
+   * @returns {User} user
+   * @memberof PickRoomComponent
+   */
+  getOneUser(id: number): User {
     let userB = new User();
     this._userService.getOneUserById(id)
       .subscribe(data => {
@@ -161,6 +213,12 @@ export class PickRoomComponent implements OnInit {
     return userB;
   }
 
+  /**
+   * Get User logged In (attribut connected === true)
+   *
+   * @returns {User[]} list Users
+   * @memberof PickRoomComponent
+   */
   getUserLoggedIn(): User[] {
     const userLogin: User[] = [];
     this._userService.getAllUser()
@@ -187,17 +245,22 @@ export class PickRoomComponent implements OnInit {
     this.socket.emit('disconnect');
   } */
 
+  /**
+   * Set this.selectedUsers en fonction des users selectionnés
+   *
+   * @param {User} user user body
+   * @memberof PickRoomComponent
+   */
   onUsersSelected(user: User) {
     if (this.selectedUsers.indexOf(user) !== -1) {
       this.selectedUsers.splice(this.selectedUsers.indexOf(user), 1);
     } else {
       this.selectedUsers.push(user);
     }
-    console.log(this.selectedUsers);
   }
 
   ngOnInit() {
-    // Test si sessionStorage contient user
+    // Si sessionStorage contient user, affiche select User list
     if (sessionStorage.length > 0) {
       this.userLoggedIn = true;
       this.user = JSON.parse(sessionStorage.getItem('user'));
@@ -207,7 +270,6 @@ export class PickRoomComponent implements OnInit {
     // On user Logged In
     this.socket.on('add-user', user => {
       this.getUserLoggedIn();
-      console.log(user);
       if (user.nickname !== this.user.nickname) {
         this._flashMsg.successMsg(user.nickname + ' s\'est connecté');
       }
