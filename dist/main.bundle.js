@@ -221,7 +221,7 @@ var ChatRoomComponent = (function () {
         this._router = _router;
         this.activatedRoute = activatedRoute;
         // socket = io('http://localhost:3000/');
-        this.socket = __WEBPACK_IMPORTED_MODULE_2_socket_io_client__('http://192.168.0.15:3000/');
+        this.socket = __WEBPACK_IMPORTED_MODULE_2_socket_io_client__('https://chat-paulo.herokuapp.com/');
         this.room = new __WEBPACK_IMPORTED_MODULE_9__models_Room__["a" /* Room */]();
         this.chat = new __WEBPACK_IMPORTED_MODULE_8__models_Chat__["a" /* Chat */]();
         this.user = new __WEBPACK_IMPORTED_MODULE_7__models_User__["a" /* User */]();
@@ -471,7 +471,7 @@ var PickRoomComponent = (function () {
         this._router = _router;
         // Change for test on several device or PROD
         // socket = io('http://localhost:3000/');
-        this.socket = __WEBPACK_IMPORTED_MODULE_2_socket_io_client__('http://192.168.0.15:3000/');
+        this.socket = __WEBPACK_IMPORTED_MODULE_2_socket_io_client__('https://chat-paulo.herokuapp.com/');
         this.user = new __WEBPACK_IMPORTED_MODULE_7__models_User__["a" /* User */]();
         this.selectedUsers = new Array();
         this.users = new Array();

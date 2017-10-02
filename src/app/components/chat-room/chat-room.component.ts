@@ -20,7 +20,7 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 
   // socket = io('http://localhost:3000/');
-  socket = io('http://192.168.0.15:3000/');
+  socket = io('https://chat-paulo.herokuapp.com/');
   id_room: number;
   room = new Room();
   chat = new Chat();

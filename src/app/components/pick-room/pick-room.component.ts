@@ -18,7 +18,7 @@ import { Room } from '../../models/Room';
 export class PickRoomComponent implements OnInit {
   // Change for test on several device or PROD
   // socket = io('http://localhost:3000/');
-  socket = io('http://192.168.0.15:3000/');
+  socket = io('https://chat-paulo.herokuapp.com/');
 
   nickname: string;
   roomCommune;
