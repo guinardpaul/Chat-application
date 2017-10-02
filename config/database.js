@@ -1,7 +1,7 @@
-const crypto = require('crypto').randomBytes(256).toString('hex');
+//const crypto = require('crypto').randomBytes(256).toString('hex');
 
 module.exports = {
   uri: process.env.databaseUri,
-  secret: crypto,
+  //secret: crypto,
   db: process.env.databaseName
 }

@@ -10,7 +10,7 @@ const favicon = require('serve-favicon');
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const port = process.env.PORT || 3000;
-const db = 'mongodb://localhost:27017/chat-app-mean';
+const db = 'mongodb://admin:admin@ds135574.mlab.com:35574/chat-app-mean';
 const config = require('./config/database');
 
 const chat = require('./app/routes/chat');

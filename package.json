@@ -6,8 +6,8 @@
   "main": "server.js",
   "author": "Paul GUINARD",
   "scripts": {
-    "ng": "ng",
     "start": "node ./server.js",
+    "ng": "ng",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
