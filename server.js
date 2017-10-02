@@ -35,7 +35,7 @@ app.use(logger('dev'));
 app.use(favicon(path.join(__dirname, 'dist', 'favicon.ico')));
 // Allows cross origin in development only
 // Decomment for test
-app.use(cors({ origin: 'http://192.168.0.15:3000/' }));
+app.use(cors({ origin: 'https://chat-paulo.herokuapp.com/' }));
 //app.use(cors({ origin: 'http://localhost:4200' }));
 // body-parser
 app.use(bodyParser.json());
