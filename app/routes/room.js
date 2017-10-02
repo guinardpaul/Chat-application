@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const Room = require('../models/Room');
 
 /**
@@ -25,18 +26,41 @@ router.get('/room', (req, res, next) => {
  * get room by users
  * TODO: A modifier pour trouver room qq soit l'user id
  */
-router.get('/room/users/:users', (req, res, next) => {
-  if (!req.params.users) {
+router.get('/room/userA/:userA/userB/:userB', (req, res, next) => {
+  if (!req.params.userA) {
     res.json({
       success: false,
-      message: 'users not provided'
+      message: 'userA not provided'
+    });
+  } else if (!req.params.userB) {
+    res.json({
+      success: false,
+      message: 'userB not provided'
+    });
+  } else if (req.params.userA === req.params.userB) {
+    res.json({
+      success: false,
+      message: 'userA id égale userB id'
     });
   } else {
-    Room.findOne({ users: req.params.users }, (err, data) => {
+    Room.findOne({ users: { $in: [req.params.userA, req.params.userB] } }, (err, data) => {
       if (err) {
+        if (err.name === 'CastError') {
+          res.json({
+            success: false,
+            message: 'Id for one or both users not provided',
+            error: err
+          });
+        } else {
+          res.json({
+            success: false,
+            message: err
+          });
+        }
+      } else if (!data) {
         res.json({
           success: false,
-          message: err
+          message: 'No room find'
         });
       } else {
         res.json({

@@ -41,7 +41,7 @@ router.get('/users/:id', (req, res, next) => {
   }
 });
 
-router.get('/users/:nickname', (req, res, next) => {
+router.get('/users/nickname/:nickname', (req, res, next) => {
   if (!req.params.nickname) {
     res.json({
       success: false,

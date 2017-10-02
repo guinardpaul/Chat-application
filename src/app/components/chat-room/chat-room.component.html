@@ -8,7 +8,7 @@
             <button type="button" (click)="onLogout()" class="btn btn-default btn-xs">Se déconnecter</button>
           </div>
         </div>
-        <div class="panel-body">
+        <div #scrollMe class="panel-body">
           <ul class="chat">
             <li *ngFor="let m of listMessages">
               <div class="left clearfix" *ngIf="m.nickname===nickname; else rightchat">
@@ -18,7 +18,7 @@
                 <div class="chat-body clearfix">
                   <div class="header">
                     <strong class="primary-font">{{ m.nickname }}</strong> <small class="pull-right text-muted">
-                                          <span class="glyphicon glyphicon-time"></span>{{ m.date | date: 'medium' }}</small>
+                                          <span class="glyphicon glyphicon-time"></span>{{ m.updated_at | date: 'medium' }}</small>
                   </div>
                   <p class="msg-space">{{ m.message }}</p>
                 </div>
@@ -30,7 +30,7 @@
                       </span>
                   <div class="chat-body clearfix">
                     <div class="header">
-                      <small class="text-muted"><span class="glyphicon glyphicon-time"></span>{{ m.date | date: 'medium' }}</small>
+                      <small class="text-muted"><span class="glyphicon glyphicon-time"></span>{{ m.updated_at | date: 'medium' }}</small>
                       <strong class="pull-right primary-font">{{ m.nickname }}</strong>
                     </div>
                     <p>{{ m.message }}</p>
@@ -41,7 +41,7 @@
         </div>
 
         <div class="panel-footer">
-          <form class="form-inline">
+          <form class="form-inline" (submit)="sendMessage()">
             <div class="form-group full-width">
               <!-- <input id="btn-input" type="text" class="form-control " name="message" [(ngModel)]="message" placeholder="message . . ."
               autofocus required/>
@@ -57,7 +57,7 @@
                       </md-form-field>
                 </span>
               <span class="col-md-1 col-sm-1 col-lg-1 col-xs-6">
-                  <button id="btn-chat" md-raised-button color="primary" (click)="sendMessage()" class="button-position">Send</button>                 
+                  <button id="btn-chat" md-raised-button color="primary" type="submit" class="button-position">Send</button>                 
               </span>
               </span>
             </div>

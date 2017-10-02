@@ -61,6 +61,7 @@ io.on('connection', (socket) => {
     //console.log('User connected');
     socket.on('login', (user) => {
         console.log(user.nickname + ' logged In !');
+        console.log(user);
         io.emit('add-user', user);
     });
 
@@ -75,6 +76,7 @@ io.on('connection', (socket) => {
         console.log(data);
         io.emit('new-message', data);
     });
+
 });
 
 server.listen(port, () => {

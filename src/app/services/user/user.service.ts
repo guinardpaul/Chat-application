@@ -26,7 +26,7 @@ export class UserService {
   }
 
   getOneUserByNickname(nickname: string): Observable<any> {
-    return this._http.get(`${devUrl}/${nickname}`);
+    return this._http.get(`${devUrl}/nickname/${nickname}`);
   }
 
   saveUser(user): Observable<any> {

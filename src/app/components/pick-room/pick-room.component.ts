@@ -21,6 +21,7 @@ export class PickRoomComponent implements OnInit {
   socket = io('http://192.168.0.15:3000/');
 
   nickname: string;
+  roomCommune;
   user = new User();
   selectedUsers = new Array<User>();
   users = new Array<User>();
@@ -62,6 +63,7 @@ export class PickRoomComponent implements OnInit {
     this._userService.saveUser(user)
       .subscribe(data => {
         this.user = data.obj;
+        console.log('User saved to database');
         sessionStorage.setItem('user', JSON.stringify(data.obj));
       }, err => console.log(err)
       , () => this.socket.emit('login', this.user)
@@ -86,24 +88,45 @@ export class PickRoomComponent implements OnInit {
       );
   }
 
-  // TODO:
   joinRoom() {
-    // create roomName based on users nickname
-    this.selectedUsers.push(this.user);
-    let roomName = '';
-    for (const user in this.selectedUsers) {
-      if (this.selectedUsers.hasOwnProperty(user)) {
-        roomName += this.selectedUsers[ user ].nickname;
+    // Check si room between the two users exists
+    // Get User B information
+    let userB = new User();
+    userB = this.selectedUsers[ 0 ];
+    this.getRoomCommuneTwoUsers(this.user._id, userB._id);
+
+    setTimeout(() => {
+      if (this.roomCommune.success) {
+        setTimeout(() => {
+          this._router.navigate([ '/room', this.roomCommune.obj._id ]);
+        }, 1000);
+      } else {
+        // Room doesn't exists => Create room
+        // create roomName based on users nickname
+        this.selectedUsers.push(this.user);
+        let roomName = '';
+        for (const user in this.selectedUsers) {
+          if (this.selectedUsers.hasOwnProperty(user)) {
+            roomName += this.selectedUsers[ user ].nickname;
+          }
+        }
+        const room = {
+          name: roomName,
+          users: this.selectedUsers
+        };
+
+        this.saveRoom(room);
       }
-    }
+      const now = new Date(Date.now());
+      const joinMsg = {
+        nickname: this.user.nickname,
+        message: this.user.nickname + ' s\'est connecté',
+        updated_at: now
+      };
 
-    // Save room
-    const room = {
-      name: roomName,
-      users: this.selectedUsers
-    };
+      this.socket.emit('send-message', joinMsg);
+    }, 2000);
 
-    this.saveRoom(room);
   }
 
   saveRoom(room: Room) {
@@ -116,6 +139,26 @@ export class PickRoomComponent implements OnInit {
     setTimeout(() => {
       this._router.navigate([ '/room', JSON.parse(localStorage.getItem('room')) ]);
     }, 1000);
+  }
+
+  getRoomCommuneTwoUsers(idA: number, idB: number) {
+    return this._roomService.getRoomCommune(idA, idB)
+      .subscribe(data => {
+        console.log(data);
+        this.roomCommune = data;
+      }, err => console.log(err)
+      );
+  }
+
+  getOneUser(id): User {
+    let userB = new User();
+    this._userService.getOneUserById(id)
+      .subscribe(data => {
+        console.log(data);
+        userB = data.obj;
+      }, err => console.log(err)
+      );
+    return userB;
   }
 
   getUserLoggedIn(): User[] {

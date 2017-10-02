@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as io from 'socket.io-client';
 
@@ -16,7 +16,9 @@ import { Room } from '../../models/Room';
   templateUrl: './chat-room.component.html',
   styleUrls: [ './chat-room.component.css' ]
 })
-export class ChatRoomComponent implements OnInit {
+export class ChatRoomComponent implements OnInit, AfterViewChecked {
+  @ViewChild('scrollMe') private myScrollContainer: ElementRef;
+
   // socket = io('http://localhost:3000/');
   socket = io('http://192.168.0.15:3000/');
   id_room: number;
@@ -54,7 +56,11 @@ export class ChatRoomComponent implements OnInit {
   }
 
   saveChat(chat: Chat) {
-    this._chatService.saveMessage(chat);
+    this._chatService.saveMessage(chat)
+      .subscribe(data => {
+        console.log(data);
+      }, err => console.log(err)
+      );
   }
 
   getRoomById(id: number) {
@@ -88,11 +94,20 @@ export class ChatRoomComponent implements OnInit {
     this._router.navigate([ '/pick-room' ]);
   }
 
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    } catch (err) { }
+  }
+
   ngOnInit() {
     // Recupere nickname from localStorage
     this.user = JSON.parse(sessionStorage.getItem('user'));
     this.nickname = this.user.nickname;
-    console.log(this.user);
 
     if (this.activatedRoute.snapshot.params[ 'id' ] !== undefined) {
       this.id_room = this.activatedRoute.snapshot.params[ 'id' ];
@@ -103,6 +118,9 @@ export class ChatRoomComponent implements OnInit {
     // envoi un message au server via la methode emit('send-message')
     this.socket.on('new-message', data => {
       this.listMessages.push(data);
+      this.scrollToBottom();
     });
+    this.scrollToBottom();
   }
+
 }
