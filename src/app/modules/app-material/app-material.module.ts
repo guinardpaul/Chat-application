@@ -2,29 +2,32 @@ import { NgModule } from '@angular/core';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  MdInputModule,
-  MdButtonModule,
-  MdListModule,
-  MdCardModule,
-  MdChipsModule
+  MatInputModule,
+  MatButtonModule,
+  MatListModule,
+  MatCardModule,
+  MatChipsModule,
+  MatFormFieldModule
 } from '@angular/material';
 
 @NgModule({
   imports: [
     BrowserAnimationsModule,
-    MdInputModule,
-    MdButtonModule,
-    MdListModule,
-    MdCardModule,
-    MdChipsModule
+    MatInputModule,
+    MatButtonModule,
+    MatListModule,
+    MatCardModule,
+    MatChipsModule,
+    MatFormFieldModule
   ],
   exports: [
     BrowserAnimationsModule,
-    MdInputModule,
-    MdButtonModule,
-    MdListModule,
-    MdCardModule,
-    MdChipsModule
+    MatInputModule,
+    MatButtonModule,
+    MatListModule,
+    MatCardModule,
+    MatChipsModule,
+    MatFormFieldModule
   ]
 })
 export class AppMaterialModule { }

@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 // Angular Flash messages
 import { FlashMessagesModule } from 'ngx-flash-messages';
@@ -17,21 +17,24 @@ import { FlashMsgService } from './services/flash-messages/flash-messages.servic
 
 // Components
 import { AppComponent } from './app.component';
-import { ChatComponent } from './components/chat/chat.component';
 import { PickRoomComponent } from './components/pick-room/pick-room.component';
 import { ChatRoomComponent } from './components/chat-room/chat-room.component';
+import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ChatComponent,
     PickRoomComponent,
-    ChatRoomComponent
+    ChatRoomComponent,
+    RegisterComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     AppMaterialModule,
     FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
     FlashMessagesModule
@@ -42,6 +45,6 @@ import { ChatRoomComponent } from './components/chat-room/chat-room.component';
     RoomService,
     FlashMsgService
   ],
-  bootstrap: [ AppComponent ]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
