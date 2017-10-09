@@ -1,0 +1,13 @@
+<div class="form" (submit)="onRLogin()">
+  <form [formGroup]="loginForm" class="">
+    <mat-form-field>
+      <input matInput placeholder="nickname" formControlName="nickname" required />
+
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="password" formControlName="password" required />
+
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Login</button>
+  </form>
+</div>

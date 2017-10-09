@@ -44,7 +44,8 @@ const userSchema = new Schema({
         type: String,
         required: true,
         unique: true,
-        lowercase: true
+        lowercase: true,
+        validate: emailValidator
     },
     room: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -62,7 +63,7 @@ const userSchema = new Schema({
     },
 });
 
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function (next) {
     if (!this.isModified('password')) {
         return next();
     }
