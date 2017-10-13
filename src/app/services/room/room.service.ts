@@ -8,8 +8,8 @@ import 'rxjs/add/observable/throw';
 import { User } from '../../models/User';
 import { Room } from '../../models/Room';
 
-// const devUrl = 'http://localhost:3000/api/room';
-const devUrl = '/api/room';
+const devUrl = 'http://localhost:3000/api/room';
+// const devUrl = '/api/room';
 
 @Injectable()
 export class RoomService {

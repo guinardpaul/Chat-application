@@ -8,8 +8,8 @@ import 'rxjs/add/observable/throw';
 import { Room } from '../../models/Room';
 import { Chat } from '../../models/Chat';
 
-// const devUrl = 'http://localhost:3000/api/chat';
-const devUrl = '/api/chat';
+const devUrl = 'http://localhost:3000/api/chat';
+// const devUrl = '/api/chat';
 
 @Injectable()
 export class ChatService {
@@ -20,6 +20,10 @@ export class ChatService {
 
   getAllUser(): Observable<any> {
     return this._http.get(`${devUrl}`);
+  }
+
+  getAllChatByNickname(nickname: string): Observable<any> {
+    return this._http.get(`${devUrl}/nickname/${nickname}`);
   }
 
   getChatByRoom(room: Room): Observable<any> {

@@ -24,13 +24,13 @@ module.exports = (router) => {
      * get message by nickname
      */
     router.get('/chat/nickname/:nickname', (req, res, next) => {
-        if (!req.body.nickname) {
+        if (!req.params.nickname) {
             res.json({
                 success: false,
                 message: 'nickname not provided'
             });
         } else {
-            Chat.find({ nickname: req.body.nickname }, (err, data) => {
+            Chat.find({ nickname: req.params.nickname }, (err, data) => {
                 if (err) {
                     res.json({
                         success: false,

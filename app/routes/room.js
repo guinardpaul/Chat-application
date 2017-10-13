@@ -20,6 +20,29 @@ module.exports = (router) => {
         });
     });
 
+    router.get('/room/user/:user', (req, res, next) => {
+        if (!req.params.user) {
+            res.json({
+                success: false,
+                message: 'user not provided'
+            });
+        } else {
+            Room.find({ users: { $in: [req.params.user] } }, (err, data) => {
+                if (err) {
+                    res.json({
+                        success: false,
+                        message: err
+                    });
+                } else {
+                    res.json({
+                        success: true,
+                        obj: data
+                    });
+                }
+            })
+        }
+    })
+
     /**
      * get room by users
      * TODO: A modifier pour trouver room qq soit l'user id

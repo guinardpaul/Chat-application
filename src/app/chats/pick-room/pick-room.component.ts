@@ -9,6 +9,7 @@ import { FlashMsgService } from '../../services/flash-messages/flash-messages.se
 
 import { User } from '../../models/User';
 import { Room } from '../../models/Room';
+import { Chat } from '../../models/Chat';
 
 @Component({
   selector: 'app-pick-room',
@@ -18,7 +19,7 @@ import { Room } from '../../models/Room';
 export class PickRoomComponent implements OnInit {
   // Change for test on several device or PROD
   socket = io('http://localhost:3000/');
-  //socket = io('http://192.168.0.15:3000/');
+  // socket = io('http://192.168.0.15:3000/');
 
   nickname: string;
   roomCommune;
@@ -46,11 +47,24 @@ export class PickRoomComponent implements OnInit {
     if (this.user.nickname.trim().length > 0) {
       // save user to database and on sessionStorage
       this.user.connected = true;
-      this.user.updated_at = new Date(Date.now());
+      this.user.updated_at = new Date();
       this.saveUser(this.user);
       // set select room view
       this.userLoggedIn = true;
+      this.checkMessageNonLus(new Date());
     }
+  }
+
+  checkMessageNonLus(date_connection: Date): Chat {
+    let chats;
+    this._chatService.getAllChatByNickname(this.user.nickname)
+      .subscribe(data => {
+        console.log('listChatByUser');
+        console.log(data);
+        chats = data.obj;
+      }, err => console.log(err));
+
+    return chats;
   }
 
   /**
@@ -74,7 +88,7 @@ export class PickRoomComponent implements OnInit {
 
   /**
    * NOT USED
-   * 
+   *
    * @param {number} id user id
    * @param {User} user user body
    * @memberof PickRoomComponent
@@ -90,7 +104,7 @@ export class PickRoomComponent implements OnInit {
 
   /**
    * NOT USED
-   * 
+   *
    * @param {number} id user id
    * @memberof PickRoomComponent
    */
@@ -109,7 +123,7 @@ export class PickRoomComponent implements OnInit {
    * - crée room si n'existe pas
    * - redirect vers room
    * - emit connection user au server
-   * 
+   *
    * @memberof PickRoomComponent
    */
   joinRoom() {
@@ -140,12 +154,11 @@ export class PickRoomComponent implements OnInit {
           name: roomName,
           users: this.selectedUsers
         };
-
         // save Room
         this.saveRoom(room);
       }
 
-      // Emit connexion to room message
+      // Emit connection to room message
       const now = new Date();
       const joinMsg = {
         nickname: this.user.nickname,
@@ -223,6 +236,7 @@ export class PickRoomComponent implements OnInit {
     const userLogin: User[] = [];
     this._userService.getAllUser()
       .subscribe(data => {
+        console.log('listUsers');
         console.log(data);
         for (const u in data.obj) {
           if (data.obj.hasOwnProperty(u)) {
@@ -267,6 +281,7 @@ export class PickRoomComponent implements OnInit {
       this.getUserLoggedIn();
     }
 
+    // SOCKET IO
     // On user Logged In
     this.socket.on('add-user', user => {
       this.getUserLoggedIn();

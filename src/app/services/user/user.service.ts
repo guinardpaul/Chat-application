@@ -7,8 +7,8 @@ import 'rxjs/add/observable/throw';
 
 import { User } from '../../models/User';
 
-const devUrl = '/api/users';
-// const devUrl = 'http://localhost:3000/api/users';
+// const devUrl = '/api/users';
+const devUrl = 'http://localhost:3000/api/users';
 
 @Injectable()
 export class UserService {

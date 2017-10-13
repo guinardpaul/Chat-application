@@ -139,9 +139,35 @@ module.exports = (router) => {
     });
 
     /**
-     * Register User
+     * Register User WITHOUT auth
      */
     router.post('/users', (req, res, next) => {
+        if (!req.body.nickname) {
+            res.json({
+                success: false,
+                message: 'Nickname not provided'
+            });
+        } else {
+            User.create(req.body, (err, data) => {
+                if (err) {
+                    res.json({
+                        success: false,
+                        message: err
+                    });
+                } else {
+                    res.json({
+                        success: true,
+                        obj: data
+                    });
+                }
+            });
+        }
+    });
+
+    /**
+     * Register User with auth
+     */
+    router.post('/auth/users', (req, res, next) => {
         if (!req.body.nickname) {
             res.json({
                 success: false,

@@ -14,13 +14,13 @@ import { Room } from '../../models/Room';
 @Component({
   selector: 'app-chat-room',
   templateUrl: './chat-room.component.html',
-  styleUrls: ['./chat-room.component.css']
+  styleUrls: [ './chat-room.component.css' ]
 })
 export class ChatRoomComponent implements OnInit, AfterViewChecked {
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 
-   socket = io('http://localhost:3000/');
-  //socket = io('http://192.168.0.15:3000/');
+  socket = io('http://localhost:3000/');
+  // socket = io('http://192.168.0.15:3000/');
   id_room: number;
   room = new Room();
   chat = new Chat();
@@ -123,7 +123,7 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
     // Enleve user du localStorage
     // localStorage.removeItem('user');
     // Renvoi vers route /pick-roomq²
-    this._router.navigate(['/pick-room']);
+    this._router.navigate([ '/pick-room' ]);
   }
 
   ngAfterViewChecked() {
@@ -142,8 +142,8 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
     this.nickname = this.user.nickname;
 
     // Get Room
-    if (this.activatedRoute.snapshot.params['id'] !== undefined) {
-      this.id_room = this.activatedRoute.snapshot.params['id'];
+    if (this.activatedRoute.snapshot.params[ 'id' ] !== undefined) {
+      this.id_room = this.activatedRoute.snapshot.params[ 'id' ];
       this.getRoomById(this.id_room);
     }
 
