@@ -17,11 +17,21 @@
         ],
         "baseUrl": "src",
         "paths": {
-            "@env/*": ["environments/*"],
-            "@app/*": ["app/*"],
-            "@components/*": ["app/components/*"],
-            "@services/*": ["app/services/*"],
-            "@models/*": ["app/models/*"]
+            "@env/*": [
+                "environments/*"
+            ],
+            "@app/*": [
+                "app/*"
+            ],
+            "@components/*": [
+                "app/components/*"
+            ],
+            "@services/*": [
+                "app/services/*"
+            ],
+            "@models/*": [
+                "app/models/*"
+            ]
         }
     }
 }

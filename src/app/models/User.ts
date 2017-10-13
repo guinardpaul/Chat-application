@@ -4,7 +4,7 @@ export class User {
   _id?: number;
   nickname: string;
   password: string;
-  email: string;
+  email?: string;
   rooms?: Room[];
   connected?: boolean;
   updated_at?: Date;

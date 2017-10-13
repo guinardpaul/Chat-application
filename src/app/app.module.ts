@@ -17,10 +17,10 @@ import { FlashMsgService } from './services/flash-messages/flash-messages.servic
 
 // Components
 import { AppComponent } from './app.component';
-import { PickRoomComponent } from './components/pick-room/pick-room.component';
-import { ChatRoomComponent } from './components/chat-room/chat-room.component';
-import { RegisterComponent } from './components/register/register.component';
-import { LoginComponent } from './components/login/login.component';
+import { PickRoomComponent } from './chats/pick-room/pick-room.component';
+import { ChatRoomComponent } from './chats/chat-room/chat-room.component';
+import { RegisterComponent } from './authentication/register/register.component';
+import { LoginComponent } from './authentication/login/login.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +45,6 @@ import { LoginComponent } from './components/login/login.component';
     RoomService,
     FlashMsgService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }

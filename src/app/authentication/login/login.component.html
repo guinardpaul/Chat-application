@@ -2,11 +2,11 @@
   <form [formGroup]="loginForm" class="">
     <mat-form-field>
       <input matInput placeholder="nickname" formControlName="nickname" required />
-
+      <mat-error *ngIf="loginForm.controls.nickname.errors">{{getErrorMessage('nickname')}}</mat-error>
     </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="password" formControlName="password" required />
-
+      <mat-error *ngIf="loginForm.controls.password.errors">{{getErrorMessage('password')}}</mat-error>
     </mat-form-field>
     <button mat-raised-button color="primary" type="submit">Login</button>
   </form>
