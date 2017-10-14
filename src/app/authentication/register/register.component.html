@@ -1,5 +1,6 @@
 <div class="container center">
-    <form [formGroup]="registerForm" class="register-container" (submit)="onRegister()">
+    <h2>Register</h2>
+    <form [formGroup]="registerForm" class="register-container">
         <mat-form-field>
             <input matInput placeholder="nickname" formControlName="nickname" required />
             <mat-error *ngIf="registerForm.controls.nickname.errors">{{getErrorMessage('nickname')}}</mat-error>
@@ -8,17 +9,20 @@
             <input matInput placeholder="email" formControlName="email" required />
             <mat-error *ngIf="registerForm.controls.email.errors">{{getErrorMessage('email')}}</mat-error>
         </mat-form-field>
-        <div formGroupName="passwords">
+        <div formGroupName="passwords" class="passwords-container">
             <mat-form-field>
-                <input matInput placeholder="password" formControlName="password" required />
+                <input matInput type="password" placeholder="password" formControlName="password" required />
                 <mat-error *ngIf="registerForm.controls.passwords.controls.password.errors">{{getErrorMessage('password')}}</mat-error>
             </mat-form-field>
+            <br/>
             <mat-form-field>
-                <input matInput placeholder="confirmPassword" formControlName="confirmPassword" required />
+                <input matInput type="password" placeholder="confirmPassword" formControlName="confirmPassword" required />
                 <mat-error *ngIf="registerForm.controls.passwords.controls.confirmPassword.errors">{{getErrorMessage('confirmPassword')}}</mat-error>
             </mat-form-field>
         </div>
         <br/>
-        <button mat-raised-button color="primary" type="submit">Register</button>
+        <button mat-raised-button color="primary" [disabled]="!loginForm.valid || processing" (click)="onRegister()" type="submit">Register</button>
+        <label for="login">Déjà un compte ?</label>
+        <button mat-raised-button [disabled]="processing" routerLink="/login" id="login">Se connecter</button>
     </form>
 </div>

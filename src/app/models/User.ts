@@ -3,7 +3,7 @@ import { Room } from './Room';
 export class User {
   _id?: number;
   nickname: string;
-  password: string;
+  password?: string;
   email?: string;
   rooms?: Room[];
   connected?: boolean;

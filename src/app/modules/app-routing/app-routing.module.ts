@@ -13,7 +13,7 @@ const appRoutes: Routes = [
   { path: 'room/:id', component: ChatRoomComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
-  { path: '', redirectTo: 'pick-room', pathMatch: 'full' }
+  { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
 
 @NgModule({

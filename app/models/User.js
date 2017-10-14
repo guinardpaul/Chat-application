@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const Room = require('./Room');
 const bcrypt = require('bcrypt-nodejs');
 
-/* let validEmailChecker = (email) => {
+let validEmailChecker = (email) => {
     if (!email) {
         return false;
     } else {
@@ -28,7 +28,7 @@ const emailValidator = [{
 }, {
     validator: lengthEmailChecker,
     message: 'Email doit avoir moins de 40 caractères'
-}]; */
+}];
 
 const userSchema = new Schema({
     nickname: {
@@ -36,7 +36,7 @@ const userSchema = new Schema({
         required: true,
         unique: true
     },
-    /* password: {
+    password: {
         type: String,
         required: true
     },
@@ -46,7 +46,7 @@ const userSchema = new Schema({
         unique: true,
         lowercase: true,
         validate: emailValidator
-    }, */
+    },
     room: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Room'
@@ -63,7 +63,7 @@ const userSchema = new Schema({
     },
 });
 
-/* userSchema.pre('save', function (next) {
+userSchema.pre('save', function (next) {
     if (!this.isModified('password')) {
         return next();
     }
@@ -75,8 +75,8 @@ const userSchema = new Schema({
     });
 });
 
-userSchema.methods.comparePassword = (password) => {
+userSchema.methods.comparePassword = function (password) {
     return bcrypt.compareSync(password, this.password);
-}; */
+};
 
 module.exports = mongoose.model('User', userSchema);

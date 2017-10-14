@@ -1,5 +1,6 @@
-<div class="form" (submit)="onRLogin()">
-  <form [formGroup]="loginForm" class="">
+<div class="form">
+  <h2>Login</h2>
+  <form role="form" [formGroup]="loginForm" class="login-container" (submit)="onLogin()">
     <mat-form-field>
       <input matInput placeholder="nickname" formControlName="nickname" required />
       <mat-error *ngIf="loginForm.controls.nickname.errors">{{getErrorMessage('nickname')}}</mat-error>
@@ -8,6 +9,8 @@
       <input matInput placeholder="password" formControlName="password" required />
       <mat-error *ngIf="loginForm.controls.password.errors">{{getErrorMessage('password')}}</mat-error>
     </mat-form-field>
-    <button mat-raised-button color="primary" type="submit">Login</button>
+    <button mat-raised-button color="primary" [disabled]="!loginForm.valid || processing" type="submit">Login</button>
+    <label for="register">Pas de comptes ?</label>
+    <button mat-raised-button id="register" [disabled]="processing" routerLink="/register">Créer un compte</button>
   </form>
 </div>

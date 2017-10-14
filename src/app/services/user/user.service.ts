@@ -8,7 +8,7 @@ import 'rxjs/add/observable/throw';
 import { User } from '../../models/User';
 
 // const devUrl = '/api/users';
-const devUrl = 'http://localhost:3000/api/users';
+const devUrl = 'http://localhost:3000/api/';
 
 @Injectable()
 export class UserService {
@@ -18,27 +18,31 @@ export class UserService {
   ) { }
 
   getAllUser(): Observable<any> {
-    return this._http.get(`${devUrl}`);
+    return this._http.get(`${devUrl}/users`);
   }
 
   getOneUserById(id: number): Observable<any> {
-    return this._http.get(`${devUrl}/${id}`);
+    return this._http.get(`${devUrl}/users/${id}`);
   }
 
   getOneUserByNickname(nickname: string): Observable<any> {
-    return this._http.get(`${devUrl}/nickname/${nickname}`);
+    return this._http.get(`${devUrl}/users/nickname/${nickname}`);
   }
 
   saveUser(user): Observable<any> {
-    return this._http.post(`${devUrl}`, user);
+    return this._http.post(`${devUrl}/users`, user);
   }
 
-  updateStatus(id: number, user): Observable<any> {
-    return this._http.put(`${devUrl}/${id}`, user);
+  login(user: User): Observable<any> {
+    return this._http.post(`${devUrl}/login`, user);
+  }
+
+  updateUser(id: number, user): Observable<any> {
+    return this._http.put(`${devUrl}/users/${id}`, user);
   }
 
   deleteUser(id: number): Observable<any> {
-    return this._http.delete(`${devUrl}/${id}`);
+    return this._http.delete(`${devUrl}/users/${id}`);
   }
 
 }

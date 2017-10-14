@@ -20,6 +20,9 @@ module.exports = (router) => {
         });
     });
 
+    /**
+     * Get Room by User ID
+     */
     router.get('/room/user/:user', (req, res, next) => {
         if (!req.params.user) {
             res.json({

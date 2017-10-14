@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import * as io from 'socket.io-client';
 
 import { UserService } from '../../services/user/user.service';
 import { User } from '../../models/User';
@@ -10,22 +12,73 @@ import { User } from '../../models/User';
   styleUrls: [ './login.component.css' ]
 })
 export class LoginComponent implements OnInit {
+  // Change for test on several device or PROD
+  socket = io('http://localhost:3000/');
+  // socket = io('http://192.168.0.15:3000/');
   loginForm: FormGroup;
-  user = new User();
+  user: User;
+  processing: boolean;
+
+  get nickname(): string {
+    return this.loginForm.get('nickname').value as string;
+  }
+
+  get password(): string {
+    return this.loginForm.get('password').value as string;
+  }
 
   constructor(
     private _fb: FormBuilder,
-    private _userService: UserService
+    private _userService: UserService,
+    private _router: Router
   ) {
     this.createForm();
+    this.user = new User();
+    this.processing = false;
   }
 
   onLogin() {
+    this.processing = true;
     this.user = {
       nickname: this.nickname,
       password: this.password
     };
 
+    this._userService.login(this.user)
+      .subscribe(data => {
+        console.log('Login data');
+        console.log(data);
+
+        if (data.success) {
+          const now = new Date();
+          const user: User = data.obj;
+          user.updated_at = now;
+          user.connected = true;
+          setTimeout(() => {
+            console.log(data.message);
+            this._router.navigate([ 'pick-room' ]);
+          }, 1000);
+
+          this._userService.updateUser(data.obj._id, user)
+            .subscribe(updateUser => {
+              console.log('update user status');
+              console.log(updateUser);
+              sessionStorage.setItem('user', JSON.stringify(updateUser.obj));
+              this.socket.emit('login', updateUser.obj);
+            }, err => {
+              console.log(err);
+              this.processing = false;
+            }
+            );
+        } else {
+          console.log(data.message);
+          this.processing = false;
+        }
+      }, err => {
+        console.log(err);
+        this.processing = false;
+      }
+      );
   }
 
   createForm() {
@@ -37,14 +90,6 @@ export class LoginComponent implements OnInit {
         Validators.required
       ]) ]
     });
-  }
-
-  get nickname(): string {
-    return this.loginForm.get('nickname').value as string;
-  }
-
-  get password(): string {
-    return this.loginForm.get('password').value as string;
   }
 
   getErrorMessage(arg: string) {

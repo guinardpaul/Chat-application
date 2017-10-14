@@ -26,8 +26,8 @@ export class RoomService {
     return this._http.get(`${devUrl}/${id}`);
   }
 
-  getRoomByUser(user: User): Observable<any> {
-    return this._http.get(`${devUrl}/users/${user}`);
+  getRoomByUser(user_id: number): Observable<any> {
+    return this._http.get(`${devUrl}/user/${user_id}`);
   }
 
   getRoomCommune(idA: number, idB: number): Observable<any> {

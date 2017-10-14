@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { UserService } from '../../services/user/user.service';
 import { User } from '../../models/User';
@@ -11,7 +12,8 @@ import { User } from '../../models/User';
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
-  user = new User();
+  user: User;
+  processing: boolean;
 
   get nickname(): string {
     return this.registerForm.get('nickname').value as string;
@@ -26,31 +28,42 @@ export class RegisterComponent implements OnInit {
   }
 
   get password(): string {
-    return this.registerForm.get('password').value as string;
+    return this.passwords.get('password').value as string;
   }
 
   get confirmPassword(): string {
-    return this.registerForm.get('confirmPassword').value as string;
+    return this.passwords.get('confirmPassword').value as string;
   }
 
   constructor(
     private _fb: FormBuilder,
-    private _userService: UserService
+    private _userService: UserService,
+    private _router: Router
   ) {
-    // this.createForm();
+    this.createForm();
+    this.user = new User();
+    this.processing = false;
   }
 
   onRegister() {
+    this.processing = true;
     this.user = {
       nickname: this.nickname,
       password: this.password,
       email: this.email
     };
-
     this._userService.saveUser(this.user)
       .subscribe(data => {
+        console.log('Register user');
         console.log(data);
-      }, err => console.log(err)
+
+        setTimeout(() => {
+          this._router.navigate([ '/login' ]);
+        }, 1000);
+      }, err => {
+        console.log(err);
+        this.processing = true;
+      }
       );
   }
 
@@ -94,7 +107,6 @@ export class RegisterComponent implements OnInit {
   passwordValidation(controls) {
     const password = this.password;
     const confirmPassword = this.confirmPassword;
-    console.log('aaa')
     if (password === confirmPassword) {
       return null;
     }
@@ -125,9 +137,6 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.createForm();
-    console.log(this.registerForm);
-    console.log(this.passwords);
   }
 
 }

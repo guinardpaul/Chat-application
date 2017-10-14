@@ -1,28 +1,15 @@
 <div class="container-fluid center">
-
-    <div *ngIf="!userLoggedIn" class="topMarge">
-        <form (ngSubmit)="onLogin()">
-            <mat-form-field>
-                <input matInput type="text" name="user.nickname" [(ngModel)]="user.nickname" placeholder="Nickname" autocomplete="false" required>
-            </mat-form-field>
-            <button type="submit" mat-raised-button color="primary">Login</button>
-        </form>
-    </div>
-
-    <div *ngIf="userLoggedIn">
-        <h3>Nickname : {{user.nickname}}</h3>
-        <hr/>
-        <h4>Utilisateurs connectés</h4>
-        <p>Sélectionnez les personnes avec qui discuter puis cliquer sur Rejoindre pour commencer à discuter</p>
-        <mat-selection-list>
-            <mat-list-option *ngFor="let u of listUser" (click)="onUsersSelected(u)">
-                <p>{{u.nickname}}</p>
-            </mat-list-option>
-        </mat-selection-list>
-        <button mat-raised-button color="primary" (click)="joinRoom()" class="button-position">Rejoindre</button>
-        <p>
-            Users selected: {{selectedUsers | json}}
-        </p>
-    </div>
-
+    <h3 *ngIf="user.nickname !== ''">Nickname : {{user.nickname || ''}}</h3>
+    <hr/>
+    <h4>Utilisateurs connectés</h4>
+    <p>Sélectionnez les personnes avec qui discuter puis cliquer sur Rejoindre pour commencer à discuter</p>
+    <mat-selection-list>
+        <mat-list-option *ngFor="let u of listUser" (click)="onUsersSelected(u)">
+            <p>{{u.nickname}}</p>
+        </mat-list-option>
+    </mat-selection-list>
+    <button mat-raised-button color="primary" (click)="joinRoom()" class="button-position">Rejoindre</button>
+    <p>
+        Users selected: {{selectedUsers | json}}
+    </p>
 </div>

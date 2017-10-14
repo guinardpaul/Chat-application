@@ -141,7 +141,7 @@ module.exports = (router) => {
     /**
      * Register User WITHOUT auth
      */
-    router.post('/users', (req, res, next) => {
+    /* router.post('/users', (req, res, next) => {
         if (!req.body.nickname) {
             res.json({
                 success: false,
@@ -162,12 +162,12 @@ module.exports = (router) => {
                 }
             });
         }
-    });
+    }); */
 
     /**
      * Register User with auth
      */
-    router.post('/auth/users', (req, res, next) => {
+    router.post('/users', (req, res, next) => {
         if (!req.body.nickname) {
             res.json({
                 success: false,
@@ -212,6 +212,53 @@ module.exports = (router) => {
     });
 
     /**
+     * Login user
+     */
+    router.post('/login', (req, res, next) => {
+        if (!req.body.nickname) {
+            res.json({
+                success: false,
+                message: 'Nickname not provided'
+            });
+        } else if (!req.body.password) {
+            res.json({
+                success: false,
+                message: 'Password not provided'
+            });
+        } else {
+            User.findOne({ nickname: req.body.nickname.toLowerCase() }, (err, user) => {
+                if (err) {
+                    res.json({
+                        success: false,
+                        message: err
+                    });
+                } else {
+                    if (!user) {
+                        res.json({
+                            success: false,
+                            message: 'User doesn\'t exists'
+                        });
+                    } else {
+                        const validPassword = user.comparePassword(req.body.password);
+                        if (!validPassword) {
+                            res.json({
+                                success: false,
+                                message: 'Invalid password'
+                            });
+                        } else {
+                            res.json({
+                                success: true,
+                                message: 'Logged in',
+                                obj: user
+                            });
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+    /**
      * Update User
      */
     router.put('/users/:id', (req, res, next) => {
@@ -235,7 +282,7 @@ module.exports = (router) => {
                 } else {
                     res.json({
                         success: true,
-                        obj: data
+                        obj: req.body
                     });
                 }
             });

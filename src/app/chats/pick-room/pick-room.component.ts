@@ -26,7 +26,6 @@ export class PickRoomComponent implements OnInit {
   user = new User();
   selectedUsers = new Array<User>();
   users = new Array<User>();
-  userLoggedIn: boolean;
   listUser = new Array<User>();
 
   constructor(
@@ -49,20 +48,30 @@ export class PickRoomComponent implements OnInit {
       this.user.connected = true;
       this.user.updated_at = new Date();
       this.saveUser(this.user);
-      // set select room view
-      this.userLoggedIn = true;
-      this.checkMessageNonLus(new Date());
     }
   }
 
-  checkMessageNonLus(date_connection: Date): Chat {
-    let chats;
-    this._chatService.getAllChatByNickname(this.user.nickname)
+  checkMessageNonLus(date_connection: Date): Chat[] {
+    let chats: Chat[];
+    let rooms: Room[] = [];
+
+    this._roomService.getRoomByUser(this.user._id)
       .subscribe(data => {
-        console.log('listChatByUser');
+        console.log('room by user id ' + this.user._id);
         console.log(data);
-        chats = data.obj;
-      }, err => console.log(err));
+        rooms = data.obj;
+      }, err => console.log(err)
+      );
+
+    if (rooms.length > 0) {
+      this._chatService.getChatByRoom(rooms[ 0 ])
+        .subscribe(data => {
+          console.log('get chat by room ' + rooms[ 0 ].name);
+          console.log(data.obj);
+          chats = data.obj;
+        }, err => console.log(err)
+        );
+    }
 
     return chats;
   }
@@ -81,8 +90,9 @@ export class PickRoomComponent implements OnInit {
         this.user = data.obj;
         console.log('User saved to database');
         sessionStorage.setItem('user', JSON.stringify(data.obj));
+        this.socket.emit('login', data.obj);
+        this.checkMessageNonLus(new Date());
       }, err => console.log(err)
-      , () => this.socket.emit('login', this.user)
       );
   }
 
@@ -95,7 +105,7 @@ export class PickRoomComponent implements OnInit {
    */
   updateStatusUser(id: number, user: User) {
     this.user.connected = false;
-    this._userService.updateStatus(id, user)
+    this._userService.updateUser(id, user)
       .subscribe(data => {
         // TODO: add flash messages logout/login
       }, err => console.log(err)
@@ -276,7 +286,6 @@ export class PickRoomComponent implements OnInit {
   ngOnInit() {
     // Si sessionStorage contient user, affiche select User list
     if (sessionStorage.length > 0) {
-      this.userLoggedIn = true;
       this.user = JSON.parse(sessionStorage.getItem('user'));
       this.getUserLoggedIn();
     }
