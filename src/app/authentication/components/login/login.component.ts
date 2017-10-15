@@ -3,8 +3,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as io from 'socket.io-client';
 
-import { UserService } from '../../services/user/user.service';
-import { User } from '../../models/User';
+// Services
+import { UserService } from '@sharedServices/User/user.service';
+import { AuthenticationService } from '@authServices/authentication.service';
+
+// Models
+import { User } from '@sharedModels/User';
 
 @Component({
   selector: 'app-login',
@@ -30,6 +34,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _userService: UserService,
+    private _authService: AuthenticationService,
     private _router: Router
   ) {
     this.createForm();
@@ -44,7 +49,7 @@ export class LoginComponent implements OnInit {
       password: this.password
     };
 
-    this._userService.login(this.user)
+    this._authService.login(this.user)
       .subscribe(data => {
         console.log('Login data');
         console.log(data);

@@ -17,6 +17,7 @@ const config = require('./config/database');
 const chat = require('./app/routes/chat')(router);
 const user = require('./app/routes/user')(router);
 const room = require('./app/routes/room')(router);
+const auth = require('./app/routes/authentication')(router);
 
 mongoose.Promise = global.Promise;
 // mongoDB connection
@@ -56,6 +57,7 @@ app.get('/', (req, res) => {
 app.use('/api', chat);
 app.use('/api', user);
 app.use('/api', room);
+app.use('/api', auth);
 
 // socket.io
 io.on('connection', (socket) => {

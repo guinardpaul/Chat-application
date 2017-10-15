@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
 
-import { User } from '../../models/User';
+// Models
+import { User } from '@sharedModels/User';
 
 // const devUrl = '/api/users';
 const devUrl = 'http://localhost:3000/api/';
@@ -27,14 +25,6 @@ export class UserService {
 
   getOneUserByNickname(nickname: string): Observable<any> {
     return this._http.get(`${devUrl}/users/nickname/${nickname}`);
-  }
-
-  saveUser(user): Observable<any> {
-    return this._http.post(`${devUrl}/users`, user);
-  }
-
-  login(user: User): Observable<any> {
-    return this._http.post(`${devUrl}/login`, user);
   }
 
   updateUser(id: number, user): Observable<any> {

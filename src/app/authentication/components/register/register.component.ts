@@ -2,8 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { UserService } from '../../services/user/user.service';
-import { User } from '../../models/User';
+// Services
+import { UserService } from '@sharedServices/User/user.service';
+import { AuthenticationService } from '@authServices/authentication.service';
+
+// Models
+import { User } from '@sharedModels/User';
 
 @Component({
   selector: 'app-register',
@@ -38,6 +42,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _userService: UserService,
+    private _authService: AuthenticationService,
     private _router: Router
   ) {
     this.createForm();
@@ -52,7 +57,7 @@ export class RegisterComponent implements OnInit {
       password: this.password,
       email: this.email
     };
-    this._userService.saveUser(this.user)
+    this._authService.register(this.user)
       .subscribe(data => {
         console.log('Register user');
         console.log(data);

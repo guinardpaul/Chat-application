@@ -2,14 +2,14 @@ import { Component, OnInit, AfterViewChecked, ElementRef, ViewChild } from '@ang
 import { Router, ActivatedRoute } from '@angular/router';
 import * as io from 'socket.io-client';
 
-import { ChatService } from '../../services/chat/chat.service';
-import { UserService } from '../../services/user/user.service';
-import { RoomService } from '../../services/room/room.service';
-import { FlashMsgService } from '../../services/flash-messages/flash-messages.service';
+import { ChatService } from '@chatsServices/chat/chat.service';
+import { UserService } from '@sharedServices/user/user.service';
+import { RoomService } from '@chatsServices/room/room.service';
+import { FlashMsgService } from '@sharedServices/flash-messages/flash-messages.service';
 
-import { User } from '../../models/User';
-import { Chat } from '../../models/Chat';
-import { Room } from '../../models/Room';
+import { User } from '@sharedModels/User';
+import { Chat } from '@sharedModels/Chat';
+import { Room } from '@sharedModels/Room';
 
 @Component({
   selector: 'app-chat-room',

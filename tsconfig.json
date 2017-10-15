@@ -18,19 +18,28 @@
         "baseUrl": "src",
         "paths": {
             "@env/*": [
-                "environments/*"
+                "./environments/*"
             ],
             "@app/*": [
-                "app/*"
+                "./app/*"
             ],
-            "@components/*": [
-                "app/components/*"
+            "@chatsComponents/*": [
+                "./app/chats/components/*"
             ],
-            "@services/*": [
-                "app/services/*"
+            "@chatsServices/*": [
+                "./app/chats/services/*"
             ],
-            "@models/*": [
-                "app/models/*"
+            "@authComponents/*": [
+                "./app/authentication/components/*"
+            ],
+            "@authServices/*": [
+                "./app/authentication/services/*"
+            ],
+            "@sharedServices/*": [
+                "./app/shared/services/*"
+            ],
+            "@sharedModels/*": [
+                "./app/shared/models/*"
             ]
         }
     }

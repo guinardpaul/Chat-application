@@ -10,17 +10,17 @@ import { AppRoutingModule } from './modules/app-routing/app-routing.module';
 import { AppMaterialModule } from './modules/app-material/app-material.module';
 
 // Services
-import { ChatService } from './services/chat/chat.service';
-import { UserService } from './services/user/user.service';
-import { RoomService } from './services/room/room.service';
-import { FlashMsgService } from './services/flash-messages/flash-messages.service';
+import { ChatService } from './chats/services/chat/chat.service';
+import { UserService } from './shared/services/user/user.service';
+import { RoomService } from './chats/services/room/room.service';
+import { FlashMsgService } from './shared/services/flash-messages/flash-messages.service';
 
 // Components
 import { AppComponent } from './app.component';
-import { PickRoomComponent } from './chats/pick-room/pick-room.component';
-import { ChatRoomComponent } from './chats/chat-room/chat-room.component';
-import { RegisterComponent } from './authentication/register/register.component';
-import { LoginComponent } from './authentication/login/login.component';
+import { PickRoomComponent } from './chats/components/pick-room/pick-room.component';
+import { ChatRoomComponent } from './chats/components/chat-room/chat-room.component';
+import { RegisterComponent } from './authentication/components/register/register.component';
+import { LoginComponent } from './authentication/components/login/login.component';
 
 @NgModule({
   declarations: [

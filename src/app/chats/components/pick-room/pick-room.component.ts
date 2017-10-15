@@ -2,14 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import * as io from 'socket.io-client';
 
-import { ChatService } from '../../services/chat/chat.service';
-import { UserService } from '../../services/user/user.service';
-import { RoomService } from '../../services/room/room.service';
-import { FlashMsgService } from '../../services/flash-messages/flash-messages.service';
+import { ChatService } from '@chatsServices/chat/chat.service';
+import { UserService } from '@sharedServices/user/user.service';
+import { RoomService } from '@chatsServices/room/room.service';
+import { FlashMsgService } from '@sharedServices/flash-messages/flash-messages.service';
 
-import { User } from '../../models/User';
-import { Room } from '../../models/Room';
-import { Chat } from '../../models/Chat';
+import { User } from '@sharedModels/User';
+import { Chat } from '@sharedModels/Chat';
+import { Room } from '@sharedModels/Room';
 
 @Component({
   selector: 'app-pick-room',
@@ -47,7 +47,7 @@ export class PickRoomComponent implements OnInit {
       // save user to database and on sessionStorage
       this.user.connected = true;
       this.user.updated_at = new Date();
-      this.saveUser(this.user);
+      /* this.saveUser(this.user); */
     }
   }
 
@@ -84,7 +84,7 @@ export class PickRoomComponent implements OnInit {
    * @param {User} user user body
    * @memberof PickRoomComponent
    */
-  saveUser(user: User) {
+  /* saveUser(user: User) {
     this._userService.saveUser(user)
       .subscribe(data => {
         this.user = data.obj;
@@ -94,7 +94,7 @@ export class PickRoomComponent implements OnInit {
         this.checkMessageNonLus(new Date());
       }, err => console.log(err)
       );
-  }
+  } */
 
   /**
    * NOT USED
