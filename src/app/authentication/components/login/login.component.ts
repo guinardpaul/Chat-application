@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import * as io from 'socket.io-client';
 
 // Services
-import { UserService } from '@sharedServices/User/user.service';
+import { UserService } from '@sharedServices/user/user.service';
 import { AuthenticationService } from '@authServices/authentication.service';
 
 // Models
