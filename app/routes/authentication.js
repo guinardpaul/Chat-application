@@ -122,7 +122,7 @@ module.exports = (router) => {
   });
 
   router.get('/profile', (req, res, next) => {
-    User.findById(req.decoded.userId).select('username email').exec((err, user) => {
+    User.findById(req.decoded.userId).select('nickname email updated_at connected').exec((err, user) => {
       if (err) {
         res.json({
           success: false,

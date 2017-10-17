@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import * as io from 'socket.io-client';
 
+import { AuthenticationService } from '@authServices/authentication.service';
 import { ChatService } from '@chatsServices/chat/chat.service';
 import { UserService } from '@sharedServices/user/user.service';
 import { RoomService } from '@chatsServices/room/room.service';
@@ -32,6 +33,7 @@ export class PickRoomComponent implements OnInit {
     private _userService: UserService,
     private _chatService: ChatService,
     private _roomService: RoomService,
+    private _authService: AuthenticationService,
     private _flashMsg: FlashMsgService,
     private _router: Router
   ) { }
@@ -250,7 +252,7 @@ export class PickRoomComponent implements OnInit {
         console.log(data);
         for (const u in data.obj) {
           if (data.obj.hasOwnProperty(u)) {
-            if (data.obj[ u ].connected && data.obj[ u ].nickname !== JSON.parse(sessionStorage.getItem('user')).nickname) {
+            if (data.obj[ u ].connected && (data.obj[ u ].nickname !== JSON.parse(localStorage.getItem('user')).nickname)) {
               userLogin.push(data.obj[ u ]);
             }
           }
@@ -284,11 +286,13 @@ export class PickRoomComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Si sessionStorage contient user, affiche select User list
-    if (sessionStorage.length > 0) {
-      this.user = JSON.parse(sessionStorage.getItem('user'));
-      this.getUserLoggedIn();
-    }
+    this._authService.getProfile()
+      .subscribe(profile => {
+        this.user = profile.obj;
+        this.getUserLoggedIn();
+      }, err => console.log(err)
+      );
+
 
     // SOCKET IO
     // On user Logged In

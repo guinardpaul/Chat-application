@@ -64,10 +64,10 @@ export class LoginComponent implements OnInit {
             .subscribe(updateUser => {
               console.log('update user status');
               console.log(updateUser);
-              sessionStorage.setItem('user', JSON.stringify(updateUser.obj));
-              this.socket.emit('login', updateUser.obj);
+              this._authService.storeUserData(data.token, updateUser.obj);
 
               setTimeout(() => {
+                this.socket.emit('login', updateUser.obj);
                 console.log(data.message);
                 this._router.navigate([ 'pick-room' ]);
               }, 1000);
