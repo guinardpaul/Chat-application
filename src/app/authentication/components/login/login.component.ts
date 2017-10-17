@@ -59,10 +59,6 @@ export class LoginComponent implements OnInit {
           const user: User = data.obj;
           user.updated_at = now;
           user.connected = true;
-          setTimeout(() => {
-            console.log(data.message);
-            this._router.navigate([ 'pick-room' ]);
-          }, 1000);
 
           this._userService.updateUser(data.obj._id, user)
             .subscribe(updateUser => {
@@ -70,6 +66,11 @@ export class LoginComponent implements OnInit {
               console.log(updateUser);
               sessionStorage.setItem('user', JSON.stringify(updateUser.obj));
               this.socket.emit('login', updateUser.obj);
+
+              setTimeout(() => {
+                console.log(data.message);
+                this._router.navigate([ 'pick-room' ]);
+              }, 1000);
             }, err => {
               console.log(err);
               this.processing = false;

@@ -14,11 +14,10 @@ import { ChatsModule } from './chats/chats.module';
 
 // Services
 import { FlashMsgService } from './shared/services/flash-messages/flash-messages.service';
+import { UserService } from './shared/services/user/user.service';
 
 // Components
 import { AppComponent } from './app.component';
-
-
 
 @NgModule({
   declarations: [
@@ -37,7 +36,8 @@ import { AppComponent } from './app.component';
     FlashMessagesModule
   ],
   providers: [
-
+    FlashMsgService,
+    UserService
   ],
   bootstrap: [ AppComponent ]
 })

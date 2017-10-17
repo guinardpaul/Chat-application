@@ -6,7 +6,7 @@ module.exports = (router) => {
   /**
   * Register User with auth
   */
-  router.post('/users', (req, res, next) => {
+  router.post('/register', (req, res, next) => {
     if (!req.body.nickname) {
       res.json({
         success: false,
@@ -97,6 +97,49 @@ module.exports = (router) => {
         }
       });
     }
+  });
+
+  router.use((req, res, next) => {
+    const token = req.headers['authorization'];
+    if (!token) {
+      res.json({
+        success: false,
+        message: 'token not provided'
+      });
+    } else {
+      jwt.verify(token, config.secret, (err, decoded) => {
+        if (err) {
+          res.json({
+            success: false,
+            message: 'token invalid'
+          });
+        } else {
+          req.decoded = decoded;
+          next();
+        }
+      });
+    }
+  });
+
+  router.get('/profile', (req, res, next) => {
+    User.findById(req.decoded.userId).select('username email').exec((err, user) => {
+      if (err) {
+        res.json({
+          success: false,
+          message: err
+        });
+      } else if (!user) {
+        res.json({
+          success: false,
+          message: 'User not find'
+        });
+      } else {
+        res.json({
+          success: true,
+          obj: user
+        });
+      }
+    })
   });
 
   return router;
