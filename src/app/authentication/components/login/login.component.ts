@@ -2,18 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as io from 'socket.io-client';
-
 // Services
 import { UserService } from '@sharedServices/user/user.service';
 import { AuthenticationService } from '@authServices/authentication.service';
-
 // Models
 import { User } from '@sharedModels/User';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: [ './login.component.css' ]
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   // Change for test on several device or PROD
@@ -23,13 +21,8 @@ export class LoginComponent implements OnInit {
   user: User;
   processing: boolean;
 
-  get nickname(): string {
-    return this.loginForm.get('nickname').value as string;
-  }
-
-  get password(): string {
-    return this.loginForm.get('password').value as string;
-  }
+  get nickname(): string { return this.loginForm.get('nickname').value as string; }
+  get password(): string { return this.loginForm.get('password').value as string; }
 
   constructor(
     private _fb: FormBuilder,
@@ -69,7 +62,7 @@ export class LoginComponent implements OnInit {
               setTimeout(() => {
                 this.socket.emit('login', updateUser.obj);
                 console.log(data.message);
-                this._router.navigate([ 'pick-room' ]);
+                this._router.navigate(['pick-room']);
               }, 1000);
             }, err => {
               console.log(err);
@@ -89,22 +82,22 @@ export class LoginComponent implements OnInit {
 
   createForm() {
     this.loginForm = this._fb.group({
-      nickname: [ '', Validators.compose([
+      nickname: ['', Validators.compose([
         Validators.required
-      ]) ],
-      password: [ '', Validators.compose([
+      ])],
+      password: ['', Validators.compose([
         Validators.required
-      ]) ]
+      ])]
     });
   }
 
   getErrorMessage(arg: string) {
     switch (arg) {
       case 'nickname':
-        return this.loginForm.controls[ 'nickname' ].hasError('required') ? 'You must enter a value' :
+        return this.loginForm.controls['nickname'].hasError('required') ? 'You must enter a value' :
           '';
       case 'password':
-        return this.loginForm.controls[ 'password' ].hasError('required') ? 'You must enter a value' :
+        return this.loginForm.controls['password'].hasError('required') ? 'You must enter a value' :
           '';
       default:
         break;

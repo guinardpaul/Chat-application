@@ -1,20 +1,27 @@
 .register-container {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
-.register-container > * {
-  width: 50%;
+.register-container>* {
+    width: 50%;
 }
 
-.passwords-container > * {
-  width: 100%;
+.passwords-container>* {
+    width: 100%;
 }
 
-.center > * {
-  
-}
+.center>* {}
 
 .form {
-  text-align: center;
+    text-align: center;
+}
+
+.error {
+    color: rgb(189, 0, 0);
+    font-size: 10px;
+}
+
+.input-top-margin {
+    margin-top: 5px;
 }

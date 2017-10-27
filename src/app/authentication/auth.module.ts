@@ -2,16 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-
+import { RouterModule } from '@angular/router';
 // Modules
-import { AppMaterialModule } from '../modules/app-material/app-material.module';
-
+import { AppMaterialModule } from '../shared/modules/app-material/app-material.module';
 // Components
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
-
-// Services
-import { AuthenticationService } from './services/authentication.service';
 
 @NgModule({
   imports: [
@@ -19,7 +15,8 @@ import { AuthenticationService } from './services/authentication.service';
     AppMaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule
   ],
   declarations: [
     RegisterComponent,
@@ -28,9 +25,6 @@ import { AuthenticationService } from './services/authentication.service';
   exports: [
     RegisterComponent,
     LoginComponent
-  ],
-  providers: [
-    AuthenticationService
   ]
 })
 export class AuthModule { }

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 // Components
 import { PickRoomComponent } from '@chatsComponents/pick-room/pick-room.component';
 import { ChatRoomComponent } from '@chatsComponents/chat-room/chat-room.component';

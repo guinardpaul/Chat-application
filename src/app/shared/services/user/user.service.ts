@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-
 // Models
 import { User } from '@sharedModels/User';
-
 // const devUrl = '/api/users';
 const devUrl = 'http://localhost:3000/api/';
 
