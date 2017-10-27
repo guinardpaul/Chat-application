@@ -181,7 +181,7 @@ module.exports = (router) => {
                 message: 'id not provided'
             });
         } else {
-            User.findByIdAndUpdate(req.params.id, req.body, (err, data) => {
+            User.findByIdAndUpdate(req.params.id, req.body, { new: true }).select('nickname email connected updated_at').exec((err, data) => {
                 if (err) {
                     res.json({
                         success: false,
@@ -190,7 +190,7 @@ module.exports = (router) => {
                 } else {
                     res.json({
                         success: true,
-                        obj: req.body
+                        obj: data
                     });
                 }
             });

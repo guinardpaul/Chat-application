@@ -43,7 +43,10 @@ module.exports = (router) => {
         } else {
           res.json({
             success: true,
-            obj: data
+            obj: {
+              nickname: data.nickname,
+              email: data.email
+            }
           });
         }
       });

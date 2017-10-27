@@ -4,5 +4,18 @@
 }
 
 .login-container > * {
-  width: 50%;
+  width: 100%;
+}
+
+.login-card {
+  margin-top: 30px;
+}
+
+.register-link {
+  font-size: 12px !important;
+  margin-left: 35px !important;
+}
+
+.login-button {
+  margin-left: 40px !important;
 }

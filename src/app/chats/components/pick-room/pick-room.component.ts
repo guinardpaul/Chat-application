@@ -6,7 +6,7 @@ import { AuthenticationService } from '@authServices/authentication.service';
 import { ChatService } from '@chatsServices/chat/chat.service';
 import { UserService } from '@sharedServices/user/user.service';
 import { RoomService } from '@chatsServices/room/room.service';
-import { FlashMsgService } from '@sharedServices/flash-messages/flash-messages.service';
+import { FlashMsgService } from '@sharedServices/flash-msg/flash-msg.service';
 
 import { User } from '@sharedModels/User';
 import { Chat } from '@sharedModels/Chat';

@@ -5,13 +5,14 @@ import { Router } from '@angular/router';
 import { UserService } from '@sharedServices/user/user.service';
 import { AuthenticationService } from '@authServices/authentication.service';
 import { ValidationService } from '@authServices/validation.service';
+import { FlashMsgService } from '@sharedServices/flash-msg/flash-msg.service';
 // Models
 import { User } from '@sharedModels/User';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: [ './register.component.css' ]
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
@@ -29,6 +30,7 @@ export class RegisterComponent implements OnInit {
     private _userService: UserService,
     private _authService: AuthenticationService,
     private _validationForm: ValidationService,
+    private _flashMsg: FlashMsgService,
     private _router: Router
   ) {
     this.createForm();
@@ -47,53 +49,52 @@ export class RegisterComponent implements OnInit {
       .subscribe(data => {
         console.log('Register user');
         console.log(data);
-
+        this._flashMsg.successMsg('Compte enregistré');
         setTimeout(() => {
-          this._router.navigate(['/login']);
+          this._router.navigate([ '/login' ]);
         }, 1000);
       }, err => {
         console.log(err);
-        this.processing = true;
+        this.processing = false;
       }
       );
   }
 
   createForm() {
     this.registerForm = this._fb.group({
-      nickname: ['', Validators.compose([
+      nickname: [ '', Validators.compose([
         Validators.required
-      ])],
-      email: ['', Validators.compose([
+      ]) ],
+      email: [ '', Validators.compose([
         Validators.required,
         this._validationForm.emailValidation
-      ])],
+      ]) ],
       passwords: this._fb.group({
-        password: ['', Validators.compose([
+        password: [ '', Validators.compose([
           Validators.required
-        ])],
-        confirmPassword: ['', Validators.compose([
+        ]) ],
+        confirmPassword: [ '', Validators.compose([
           Validators.required
-        ])]
+        ]) ]
       }, { validator: this._validationForm.passwordValidation }
       )
     });
   }
 
-
   getErrorMessage(arg: string) {
     switch (arg) {
       case 'nickname':
-        return this.registerForm.controls['nickname'].hasError('required') ? 'Vous devez entrez une valeur' :
+        return this.registerForm.controls[ 'nickname' ].hasError('required') ? 'Ce champ est requis' :
           '';
       case 'email':
-        return this.registerForm.controls['email'].hasError('required') ? 'Vous devez entrez une valeur' :
-          this.registerForm.controls['email'].hasError('emailValidation') ? 'Email invalide' :
+        return this.registerForm.controls[ 'email' ].hasError('required') ? 'Ce champ est requis' :
+          this.registerForm.controls[ 'email' ].hasError('emailValidation') ? 'Email invalide' :
             '';
       case 'password':
-        return this.passwords.get('password').hasError('required') ? 'Vous devez entrez une valeur' :
+        return this.passwords.get('password').hasError('required') ? 'Ce champ est requis' :
           '';
       case 'confirmPassword':
-        return this.passwords.get('confirmPassword').hasError('required') ? 'Vous devez entrez une valeur' :
+        return this.passwords.get('confirmPassword').hasError('required') ? 'Ce champ est requis' :
           '';
       case 'passwords':
         return this.passwords.hasError('passwordValidation') ? 'Les password ne sont pas identiques' :

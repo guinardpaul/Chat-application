@@ -11,7 +11,7 @@ import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './authentication/auth.module';
 import { ChatsModule } from './chats/chats.module';
 // Services
-import { FlashMsgService } from './shared/services/flash-messages/flash-messages.service';
+import { FlashMsgService } from './shared/services/flash-msg/flash-msg.service';
 import { UserService } from './shared/services/user/user.service';
 import { ValidationService } from './authentication/services/validation.service';
 import { AuthenticationService } from './authentication/services/authentication.service';
@@ -44,6 +44,6 @@ import { AppComponent } from './app.component';
     ChatService,
     RoomService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }
